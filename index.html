@@ -1563,7 +1563,9 @@
 
   .po-next-media {
     position: relative;
-    aspect-ratio: 16 / 7;
+    width: 380px;
+    max-width: 100%;
+    aspect-ratio: 16 / 10;
     border-radius: 5px;
     overflow: hidden;
     background: var(--bg-panel);
@@ -1579,24 +1581,20 @@
 
   .po-next:hover .po-next-media img { transform: scale(1.035); }
 
-  .po-next-scrim {
+  .po-next-tag {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(10, 9, 7, 0.55), rgba(10, 9, 7, 0) 55%);
-  }
-
-  .po-next-title {
-    position: absolute;
-    left: 24px;
-    bottom: 18px;
-    font-family: "Exposure Trial VAR", Georgia, "Times New Roman", serif;
-    font-size: 1.6rem;
-    color: #fff;
-  }
-
-  @media (max-width: 620px) {
-    .po-next-media { aspect-ratio: 4 / 3; }
-    .po-next-title { font-size: 1.3rem; left: 18px; bottom: 14px; }
+    left: 14px;
+    bottom: 14px;
+    background: #f4f3ef;
+    color: #1a1a18;
+    font-family: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: 0.85rem;
+    letter-spacing: -0.005em;
+    padding: 8px 15px;
+    border-radius: 999px;
+    white-space: nowrap;
+    box-shadow: 0 6px 18px rgba(20, 18, 14, 0.14);
   }
 
   @media (max-width: 1060px) {
@@ -3872,9 +3870,6 @@
         'sharkninja', 'solar-car', 'keyak-lab', 'autonomous-rover',
         'rc-drone', 'rc-rover', 'cad-projects', 'zekrom', 'ice-cream-cow-robot'
       ];
-      var cursorBubbleEl = document.getElementById('cursorBubble');
-      var cursorDotEl = document.getElementById('cursorDot');
-      var nextHasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
       projectOrder.forEach(function (name, i) {
         var overlay = byName[name];
         if (!overlay) return;
@@ -3901,16 +3896,12 @@
         img.src = nextImg.getAttribute('src');
         img.alt = '';
 
-        var scrim = document.createElement('div');
-        scrim.className = 'po-next-scrim';
-
-        var title = document.createElement('span');
-        title.className = 'po-next-title';
-        title.textContent = nextLabel ? nextLabel.textContent : nextName;
+        var tag = document.createElement('span');
+        tag.className = 'po-next-tag';
+        tag.textContent = nextLabel ? nextLabel.textContent : nextName;
 
         media.appendChild(img);
-        media.appendChild(scrim);
-        media.appendChild(title);
+        media.appendChild(tag);
         link.appendChild(label);
         link.appendChild(media);
         main.appendChild(link);
@@ -3919,22 +3910,6 @@
           e.preventDefault();
           openProjectOverlay(nextName, link);
         });
-
-        if (cursorBubbleEl && nextHasFinePointer) {
-          link.addEventListener('mouseenter', function () {
-            cursorBubbleEl.textContent = 'see project';
-            cursorBubbleEl.classList.add('is-visible');
-            if (cursorDotEl) cursorDotEl.classList.remove('is-visible');
-          });
-          link.addEventListener('mousemove', function (e) {
-            cursorBubbleEl.style.left = e.clientX + 'px';
-            cursorBubbleEl.style.top = e.clientY + 'px';
-          });
-          link.addEventListener('mouseleave', function () {
-            cursorBubbleEl.classList.remove('is-visible');
-            if (cursorDotEl) cursorDotEl.classList.add('is-visible');
-          });
-        }
       });
 
       if (backBtn) backBtn.addEventListener('click', closeProjectOverlay);
@@ -3943,19 +3918,28 @@
         if (e.key === 'Escape' && active) closeProjectOverlay();
       });
 
-      // Logo/name in the nav: if a project overlay (or a stack of nested
-      // ones) is open, close all of them and return to the actual home
-      // page instead of just jumping the #top hash behind them.
-      var logoLink = document.querySelector('.logo');
-      if (logoLink) {
-        logoLink.addEventListener('click', function (e) {
-          if (active) {
-            e.preventDefault();
-            while (active) closeProjectOverlay();
+      // Logo/name and the work/projects/about nav links: these all just
+      // point at a plain #section hash on the home page. If a project
+      // overlay (or a stack of nested ones) is open, that hash change
+      // used to happen invisibly behind it — the overlay stayed put since
+      // only "back"/Escape actually closed overlays. Now they close the
+      // full stack first and land on the right section instead of just
+      // jumping the hash behind an overlay that never moves.
+      var homeNavLinks = document.querySelectorAll('.logo, .nav-links > a[href^="#"]');
+      homeNavLinks.forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          if (!active) return;
+          e.preventDefault();
+          var targetId = a.getAttribute('href').slice(1);
+          while (active) closeProjectOverlay();
+          var target = targetId && targetId !== 'top' ? document.getElementById(targetId) : null;
+          if (target) {
+            target.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+          } else {
             window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
           }
         });
-      }
+      });
 
       // Restore whichever overlay the URL points at on load (set by
       // syncHash above), so refreshing a project page stays on that page
