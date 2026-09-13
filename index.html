@@ -1494,7 +1494,11 @@
     margin: 28px 0 0;
   }
 
-  .po-media-portrait-row .po-figure { margin: 0; }
+  .po-media-portrait-row .po-figure {
+    margin: 0;
+    overflow: hidden;
+    border-radius: 5px;
+  }
 
   .po-media-portrait-row img,
   .po-media-portrait-row video {
@@ -1505,6 +1509,12 @@
     border-radius: 5px;
     background: var(--bg-panel);
   }
+
+  /* Video elements can render a hairline seam at one edge when their CSS
+     box lands on a fractional pixel (common with height:auto ratios).
+     Scaling slightly past the clipped figure hides it regardless of
+     which edge it lands on. */
+  .po-media-portrait-row video { transform: scale(1.02); }
 
   .po-media-portrait-row-tall img,
   .po-media-portrait-row-tall video { height: 560px; }
@@ -1543,13 +1553,17 @@
      so the portrait video stays aligned with it at every width. */
   .po-results-main .po-conclusion { margin: 0; }
 
-  .po-video { margin: 0; }
+  .po-video { margin: 0; overflow: hidden; border-radius: 5px; }
 
   .po-video video {
     display: block;
     border-radius: 5px;
     background: var(--bg-panel);
   }
+
+  /* See .po-media-portrait-row video comment: hides a possible 1px
+     rendering seam on the fractional-pixel-sized portrait video box. */
+  .po-video-portrait video { transform: scale(1.02); }
 
   .po-video-landscape { margin-top: 32px; }
 
