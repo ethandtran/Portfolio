@@ -298,10 +298,7 @@
   }
 
   .hero-photo-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 22px;
+    position: relative;
     flex-shrink: 0;
   }
 
@@ -323,8 +320,12 @@
   }
 
   .hero-recruiter-btn {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 22px;
     display: block;
-    width: 100%;
     box-sizing: border-box;
     text-align: center;
     font-size: 0.72rem;
@@ -3506,6 +3507,46 @@
     syncNavHeight();
     window.addEventListener('resize', syncNavHeight);
     if ('ResizeObserver' in window) new ResizeObserver(syncNavHeight).observe(nav);
+
+    // Hero photo: bottom-align it with the bottom of the intro text next to
+    // it. A plain align-self: flex-end aligns to the row's tallest sibling
+    // (the record player), not specifically the text, so measure and nudge
+    // instead.
+    var heroPhotoCol = document.querySelector('.hero-photo-col');
+    var heroText = document.querySelector('.hero-text');
+    if (heroPhotoCol && heroText) {
+      var syncHeroPhotoAlign = function () {
+        var photo = heroPhotoCol.querySelector('.hero-photo');
+        if (!photo) return;
+        // Reset first so the measurement is always against the natural
+        // (untransformed) position, not whatever translateY a previous call
+        // left behind — otherwise a call that lands exactly on target (diff
+        // 0) reads as "no transform needed" and wipes the correction, which
+        // then flips back and forth forever across repeated calls.
+        heroPhotoCol.style.transform = '';
+        var textRect = heroText.getBoundingClientRect();
+        var photoRect = photo.getBoundingClientRect();
+        // hero-row can wrap to a stacked layout at narrow widths, where the
+        // photo sits directly above the text instead of beside it — bottom-
+        // aligning them wouldn't make sense there. Side by side, the photo's
+        // left edge sits well left of the text's; stacked, both share the
+        // same left edge (the wrapped column), so that's what to check —
+        // top offsets differ either way because of the row's own
+        // center-alignment, so they're not a reliable signal here.
+        if (Math.abs(photoRect.left - textRect.left) < 4) return;
+        var diff = textRect.bottom - photoRect.bottom;
+        heroPhotoCol.style.transform = 'translateY(' + diff + 'px)';
+      };
+      syncHeroPhotoAlign();
+      window.addEventListener('resize', syncHeroPhotoAlign);
+      if ('ResizeObserver' in window) new ResizeObserver(syncHeroPhotoAlign).observe(heroText);
+      // The hero title types itself out on load, and a late web-font swap
+      // (FOUT) can also reflow the text after our first measurement —
+      // re-check once fonts are actually done loading, plus a fallback delay.
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncHeroPhotoAlign);
+      window.addEventListener('load', syncHeroPhotoAlign);
+      [300, 800, 1600].forEach(function (ms) { setTimeout(syncHeroPhotoAlign, ms); });
+    }
 
     // Resume dropdowns (nav + footer): blur the link after a click so the
     // menu doesn't stay stuck open once the mouse leaves (a clicked link

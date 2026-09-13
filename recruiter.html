@@ -75,6 +75,55 @@
 
   a { color: inherit; }
 
+  @media (hover: hover) and (pointer: fine) {
+    * { cursor: none !important; }
+  }
+
+  .cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--ink);
+    pointer-events: none;
+    z-index: 998;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.15s ease, transform 0.06s ease-out;
+    will-change: transform, opacity;
+  }
+
+  .cursor-dot.is-visible { opacity: 1; }
+
+  .cursor-dot.is-clicking {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+
+  .cursor-ripple {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    pointer-events: none;
+    z-index: 997;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+    animation: cursorRipple 0.55s ease-out forwards;
+  }
+
+  @keyframes cursorRipple {
+    to {
+      transform: translate(-50%, -50%) scale(3.4);
+      opacity: 0;
+    }
+  }
+
   .wrap {
     max-width: 720px;
     margin: 0 auto;
@@ -356,6 +405,15 @@
     margin: 10px 0 0;
   }
 
+  .rec-exp-desc a {
+    color: var(--blue);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--blue) 35%, transparent);
+    transition: border-color 0.15s ease;
+  }
+
+  .rec-exp-desc a:hover { border-bottom-color: var(--blue); }
+
   .rec-exp-dates {
     flex: none;
     font-size: 0.78rem;
@@ -451,7 +509,7 @@
         <div>
           <p class="rec-exp-role">Device Engineer Intern</p>
           <p class="rec-exp-company">Scientific Horizons</p>
-          <p class="rec-exp-desc">Conducting verification and validation testing for novel medical devices.</p>
+          <p class="rec-exp-desc">Translated market requirements into design specs for novel drug-delivery mechanisms and led verification and validation testing on nebulizers. Built AI tools to automate performance benchmarking for FDA 510(k) submissions.</p>
         </div>
         <p class="rec-exp-dates">Jun 2026 – Present</p>
       </div>
@@ -460,7 +518,7 @@
         <div>
           <p class="rec-exp-role">Mechanical Engineering Co-op</p>
           <p class="rec-exp-company">SharkNinja</p>
-          <p class="rec-exp-desc">Drove prototyping, failure analysis, and design across the product development lifecycle for consumer vacuum SKUs, serving as engineering lead on the Shark Navigator.</p>
+          <p class="rec-exp-desc">Drove design, testing, failure analysis, and product specifications for vacuums from prototype to launch. Optimized the autoempty system on the <a href="https://www.sharkninja.com/shark-transformer-true-pet-upright-vacuum/LX501UPG1.html" target="_blank" rel="noopener">Shark Transformer</a> and served as engineering lead on the <a href="https://www.costco.com/p/-/shark-navigator-lift-away-upright-vacuum-with-reveal-technology/4201031429" target="_blank" rel="noopener">Shark Navigator</a>.</p>
         </div>
         <p class="rec-exp-dates">Jan – Jun 2026</p>
       </div>
@@ -489,6 +547,8 @@
   </div>
 </main>
 
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
 <script>
   (function () {
     // Same nav behavior as index.html: border appears once scrolled, and
@@ -511,6 +571,37 @@
     document.querySelectorAll('.nav-dropdown a, .nav-dropdown button').forEach(function (a) {
       a.addEventListener('click', function () { a.blur(); });
     });
+
+    // Custom cursor dot (same as index.html: replaces the system pointer)
+    var hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var cursorDot = document.getElementById('cursorDot');
+    if (cursorDot && hasFinePointer) {
+      document.addEventListener('mousemove', function (e) {
+        cursorDot.style.left = e.clientX + 'px';
+        cursorDot.style.top = e.clientY + 'px';
+        cursorDot.classList.add('is-visible');
+      });
+      document.addEventListener('mouseleave', function () {
+        cursorDot.classList.remove('is-visible');
+      });
+
+      // Click: the dot ducks out and a ring ripples outward from the click point
+      document.addEventListener('mousedown', function (e) {
+        var ripple = document.createElement('div');
+        ripple.className = 'cursor-ripple';
+        ripple.style.left = e.clientX + 'px';
+        ripple.style.top = e.clientY + 'px';
+        document.body.appendChild(ripple);
+        ripple.addEventListener('animationend', function () {
+          ripple.remove();
+        });
+
+        cursorDot.classList.add('is-clicking');
+        setTimeout(function () {
+          cursorDot.classList.remove('is-clicking');
+        }, 200);
+      });
+    }
   })();
 
   (function () {
