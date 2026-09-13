@@ -1,0 +1,3652 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ethan Tran</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #faf9f7;
+    --bg-panel: #f1efeb;
+    --ink: #1a1a18;
+    --ink-soft: #6d6c66;
+    --ink-faint: #a3a29b;
+    --line: #e4e2dc;
+    --blue: #5e9bd9;
+    --blue-soft: #cfe1f5;
+    --focus: #1a1a18;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #171613;
+      --bg-panel: #201f1b;
+      --ink: #f3f2ee;
+      --ink-soft: #a4a29a;
+      --ink-faint: #6f6d66;
+      --line: #322f29;
+      --blue: #6fabdc;
+      --blue-soft: #2d3a58;
+      --focus: #f3f2ee;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #171613;
+    --bg-panel: #201f1b;
+    --ink: #f3f2ee;
+    --ink-soft: #a4a29a;
+    --ink-faint: #6f6d66;
+    --line: #322f29;
+    --blue: #6fabdc;
+    --blue-soft: #2d3a58;
+    --focus: #f3f2ee;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .serif {
+    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  .wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  /* ---------- Nav ---------- */
+
+  .site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26px 40px;
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.25s ease;
+  }
+
+  .site-nav.scrolled { border-bottom-color: var(--line); }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--ink-faint);
+  }
+
+  .logo svg { width: 18px; height: 18px; stroke: var(--ink-faint); }
+
+  .logo-word {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 1.02rem;
+    font-weight: 300;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    font-size: 0.92rem;
+    font-weight: 300;
+    letter-spacing: 0.005em;
+    color: var(--ink-soft);
+  }
+
+  .nav-links a,
+  .nav-links button {
+    text-decoration: none;
+    transition: color 0.15s ease, filter 0.25s ease, opacity 0.25s ease;
+    filter: blur(0);
+    opacity: 1;
+  }
+
+  .nav-links a:hover,
+  .nav-links button:hover { color: var(--ink); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nav-links:hover a:not(:hover),
+    .nav-links:hover button:not(:hover) {
+      filter: blur(1.5px);
+      opacity: 0.6;
+    }
+
+    .nav-links:hover .nav-dropdown:hover a:not(:hover),
+    .nav-links:hover .nav-dropdown:hover button:not(:hover) {
+      filter: none;
+      opacity: 1;
+    }
+  }
+
+  .nav-combo { display: inline-flex; align-items: center; gap: 6px; }
+
+  .ext-arrow {
+    display: inline-block;
+    width: 0;
+    overflow: hidden;
+    opacity: 0;
+    line-height: 1;
+    vertical-align: middle;
+    transform: translate(-3px, 3px);
+    transition: opacity 0.18s ease, transform 0.18s ease, width 0.18s ease, margin-left 0.18s ease;
+  }
+
+  .nav-combo a:hover .ext-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+    width: 0.75em;
+    margin-left: 2px;
+  }
+
+  .nav-dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .nav-dropdown-trigger {
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 4px 8px;
+    margin: -4px -8px;
+    border-radius: 6px;
+    transition: color 0.15s ease, filter 0.25s ease, opacity 0.25s ease, background 0.15s ease;
+  }
+
+  .nav-dropdown:hover > .nav-dropdown-trigger,
+  .nav-dropdown:focus-within > .nav-dropdown-trigger {
+    background: var(--bg);
+  }
+
+  .nav-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding-top: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    z-index: 50;
+  }
+
+  .nav-dropdown-menu-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 12px;
+    margin: -10px -12px;
+    border-radius: 8px;
+    background: var(--bg);
+  }
+
+  .nav-dropdown-menu-inner a {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 300;
+    letter-spacing: 0.005em;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .nav-dropdown-menu-inner a:hover {
+    color: var(--ink);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nav-dropdown:hover .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+
+  .nav-dropdown:focus-within .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 620px) {
+    .site-nav { padding: 20px 24px; }
+    .nav-links { gap: 12px; font-size: 0.78rem; }
+    .logo-word { display: none; }
+  }
+
+  /* ---------- Hero ---------- */
+
+  .hero { padding: 90px 0 70px; }
+
+  .hero-row {
+    display: flex;
+    align-items: center;
+    gap: 44px;
+    flex-wrap: wrap;
+  }
+
+  .hero-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 3px;
+    background: var(--bg-panel);
+    color: var(--ink-faint);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 300;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hero-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-text { flex: 1 1 420px; }
+
+  .hero-title {
+    font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+    line-height: 1.25;
+    margin: 0;
+    max-width: 30ch;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .typing-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 0.9em;
+    margin-left: 3px;
+    background: currentColor;
+    vertical-align: -0.08em;
+    animation: cursorBlink 0.9s steps(1) infinite;
+  }
+
+  @keyframes cursorBlink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  .hero-sub {
+    margin: 16px 0 0;
+    color: var(--ink-soft);
+    font-size: 1rem;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+  }
+
+  @media (max-width: 620px) {
+    .hero { padding: 60px 0 50px; }
+    .hero-photo { width: 110px; height: 110px; }
+  }
+
+  /* ---------- Record player ---------- */
+
+  .hero-record {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+    transform: translateY(24px);
+  }
+
+  .record-player {
+    width: 146px;
+    height: 146px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .record-player:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 5px;
+    border-radius: 50%;
+  }
+
+  .rp-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+    filter: drop-shadow(0 10px 20px rgba(20, 18, 14, 0.22));
+  }
+
+  .rp-disc-ring { fill: none; stroke: rgba(0, 0, 0, 0.15); stroke-width: 1; }
+
+  .rp-vinyl {
+    transform-origin: 100px 100px;
+    animation: rpSpin 2.6s linear infinite;
+    animation-play-state: paused;
+  }
+
+  .record-player.is-playing .rp-vinyl { animation-play-state: running; }
+
+  @keyframes rpSpin { to { transform: rotate(360deg); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rp-vinyl { animation: none; }
+  }
+
+  .rp-track-info {
+    margin: 0;
+    max-width: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 300;
+    color: var(--ink-faint);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  }
+
+  .rp-track-info span {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .rp-track-icon {
+    width: 11px;
+    height: 11px;
+    flex-shrink: 0;
+  }
+
+  .record-player.is-playing ~ .rp-track-info {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .rp-volume {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 146px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    pointer-events: none;
+  }
+
+  .record-player.is-playing ~ .rp-volume {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .rp-volume-icon {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 8px;
+    width: 13px;
+    height: 13px;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+  }
+
+  .rp-volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    background: var(--line);
+    border-radius: 999px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .rp-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--ink);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .rp-volume-slider:hover::-webkit-slider-thumb { transform: scale(1.15); }
+
+  .rp-volume-slider::-moz-range-thumb {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .rp-volume-slider:hover::-moz-range-thumb { transform: scale(1.15); }
+
+  .rp-volume-slider::-moz-range-track {
+    height: 2px;
+    background: var(--line);
+    border-radius: 999px;
+  }
+
+  .rp-volume-slider:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 620px) {
+    .hero-record { margin-left: 0; transform: none; }
+    .record-player { width: 108px; height: 108px; }
+    .rp-volume { width: 108px; }
+  }
+
+  /* ---------- Sections ---------- */
+
+  section { padding: 30px 0; }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 28px;
+  }
+
+  .section-label::before {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--line);
+  }
+
+  h2.section-title {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    line-height: 1.15;
+    margin: 0 0 36px;
+    max-width: 20ch;
+  }
+
+  /* ---------- Work / project tiles ---------- */
+
+  .tag {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+  }
+
+  .tile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .tile-grid-1 { grid-template-columns: 1fr; max-width: 360px; }
+  .tile-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .tile-grid-4 { grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 20px; }
+
+  @media (max-width: 820px) {
+    .tile-grid, .tile-grid-1, .tile-grid-3 { grid-template-columns: 1fr; max-width: none; }
+    .tile-grid-4 { grid-template-columns: repeat(2, 1fr); max-width: none; }
+  }
+
+  @media (min-width: 821px) and (max-width: 1000px) {
+    .tile-grid-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .tile-grid-mini .proj-tile {
+    aspect-ratio: 1 / 1;
+    background: color-mix(in srgb, var(--bg-panel) 65%, var(--bg));
+  }
+
+  .tile-grid-mini .proj-tile-fallback {
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+    font-weight: 300;
+  }
+
+  .proj-sub-title { font-size: 0.92rem; font-weight: 300; color: var(--ink); margin: 0 0 16px; }
+  .proj-sub-title:not(:first-of-type) { margin-top: 40px; }
+
+  .proj-tile {
+    position: relative;
+    display: block;
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--bg-panel);
+    aspect-ratio: 4 / 3;
+    cursor: pointer;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    * { cursor: none !important; }
+  }
+
+  .cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--ink-soft);
+    pointer-events: none;
+    z-index: 998;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.15s ease, transform 0.06s ease-out;
+    will-change: transform, opacity;
+  }
+
+  .cursor-dot.is-visible { opacity: 1; }
+
+  .cursor-dot.is-clicking {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+
+  .cursor-ripple {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink-soft);
+    pointer-events: none;
+    z-index: 997;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+    animation: cursorRipple 0.55s ease-out forwards;
+  }
+
+  @keyframes cursorRipple {
+    to {
+      transform: translate(-50%, -50%) scale(3.4);
+      opacity: 0;
+    }
+  }
+
+  .cursor-bubble {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background: #f4f3ef;
+    color: #1a1a18;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: 0.85rem;
+    letter-spacing: -0.005em;
+    padding: 8px 15px;
+    border-radius: 999px;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 6px 18px rgba(20, 18, 14, 0.14);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    will-change: transform, opacity;
+  }
+
+  .cursor-bubble.is-visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .proj-tile-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .proj-tile-img-logo {
+    object-fit: contain;
+    background: #ffffff;
+    padding: 26% 25%;
+    box-sizing: border-box;
+  }
+
+  .proj-tile-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: 1.3rem;
+    color: var(--ink-faint);
+  }
+
+  .proj-tile-scrim {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 65%;
+    background: linear-gradient(to top, rgba(10, 9, 7, 0.4), transparent);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  .proj-tile-status {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    color: var(--ink);
+    font-size: 0.78rem;
+    padding: 7px 14px;
+    border-radius: 999px;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .proj-tile-status-left {
+    right: auto;
+    left: 16px;
+  }
+
+  .proj-tile-logo {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 128px;
+    height: auto;
+    filter: drop-shadow(0 1px 5px rgba(10, 9, 7, 0.5));
+    pointer-events: none;
+  }
+
+  .proj-tile-logo-sm {
+    width: 76px;
+  }
+
+  .proj-tile-tags {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .proj-tile-tags .tag {
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    border-color: transparent;
+  }
+
+  .proj-tile:hover .proj-tile-status,
+  .proj-tile:hover .proj-tile-tags,
+  .proj-tile:hover .proj-tile-scrim,
+  .proj-tile:focus-visible .proj-tile-status,
+  .proj-tile:focus-visible .proj-tile-tags,
+  .proj-tile:focus-visible .proj-tile-scrim,
+  .proj-tile.is-active .proj-tile-status,
+  .proj-tile.is-active .proj-tile-tags,
+  .proj-tile.is-active .proj-tile-scrim {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------- About ---------- */
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+
+  .about-bio {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.005em;
+    font-size: 1.02rem;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    min-width: 0;
+    margin: 0 0 40px;
+  }
+
+  .about-bio p { margin: 0 0 14px; }
+
+  .about-meta {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    margin: 0 0 24px;
+  }
+
+  /* ---------- About gallery ---------- */
+
+  .about-gallery {
+    position: relative;
+    width: 400px;
+    height: 450px;
+    justify-self: center;
+    align-self: center;
+    transform: translate(52px, -26px);
+  }
+
+  .gallery-photo {
+    position: absolute;
+    width: 240px;
+    aspect-ratio: 4 / 5;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    box-shadow: 0 10px 26px rgba(20, 18, 14, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  }
+
+  .gallery-photo-ph {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.01em;
+  }
+
+  .gallery-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .gp-1 { top: 120px; left: 0; z-index: 1; transform: rotate(-9deg); }
+  .gp-2 { top: 11px; left: 137px; z-index: 2; transform: rotate(6deg); }
+  .gp-3 { top: 137px; left: 74px; width: 265px; z-index: 3; transform: rotate(-2deg); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .about-gallery:hover .gallery-photo { box-shadow: 0 6px 16px rgba(20, 18, 14, 0.1); }
+    .gallery-photo:hover {
+      z-index: 10 !important;
+      transform: rotate(0deg) scale(1.08) translateY(-6px) !important;
+      box-shadow: 0 18px 34px rgba(20, 18, 14, 0.22) !important;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .about-gallery { width: 100%; height: 300px; margin: 10px 0 8px; justify-self: stretch; transform: none; }
+    .gallery-photo { width: 168px; }
+    .gp-1 { top: 84px; left: calc(50% - 148px); }
+    .gp-2 { top: 8px; left: calc(50% + 4px); }
+    .gp-3 { top: 96px; left: calc(50% - 93px); width: 186px; }
+  }
+
+  .block-title {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    letter-spacing: -0.005em;
+    font-size: 1.2rem;
+    margin: 0 0 20px;
+  }
+
+  .edu-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 32px;
+  }
+
+  .edu-date { color: var(--ink-faint); font-size: 0.82rem; padding-top: 2px; }
+  .edu-school { font-weight: 300; margin: 0; font-size: 0.96rem; }
+  .edu-detail { color: var(--ink-soft); font-size: 0.9rem; margin: 4px 0 0; }
+
+  .drawer-note { font-size: 0.82rem; color: var(--ink-faint); margin: -12px 0 12px; }
+
+  .tl-row { border-top: 1px solid var(--line); }
+  .tl-row:first-of-type { border-top: none; }
+
+  .tl-trigger {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 40px 130px 1fr 18px;
+    gap: 16px;
+    align-items: start;
+    padding: 18px 0;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+  }
+
+  .tl-row:first-of-type .tl-trigger { padding-top: 0; }
+
+  .tl-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 2px;
+    background: var(--bg-panel);
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.62rem;
+    font-weight: 700;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .tl-logo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  .tl-date { color: var(--ink-faint); font-size: 0.8rem; padding-top: 2px; white-space: nowrap; }
+  .tl-role { font-weight: 300; margin: 0 0 3px; font-size: 0.95rem; }
+  .tl-org { color: var(--blue); }
+
+  a.tl-org {
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--blue) 35%, transparent);
+    transition: border-color 0.15s ease;
+  }
+
+  a.tl-org:hover { border-bottom-color: var(--blue); }
+  .tl-desc { color: var(--ink-soft); margin: 0; font-size: 0.88rem; font-weight: 300; }
+
+  .tl-plus {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: transform 0.25s ease, border-color 0.15s ease;
+  }
+
+  .tl-plus svg { width: 9px; height: 9px; }
+  .tl-row.open .tl-plus { transform: rotate(45deg); border-color: var(--blue); }
+
+  .tl-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+  .tl-row.open .tl-panel { grid-template-rows: 1fr; }
+  .tl-panel-inner { overflow: hidden; }
+
+  .tl-bullets {
+    margin: 0 0 20px;
+    padding-left: 206px;
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+  }
+
+  .tl-bullets li { margin-bottom: 6px; }
+  .tl-bullets li::marker { color: var(--blue); }
+
+  @media (max-width: 560px) {
+    .tl-trigger { grid-template-columns: 32px 1fr 18px; gap: 10px; }
+    .tl-date { display: none; }
+    .tl-logo { width: 32px; height: 32px; }
+    .tl-bullets { padding-left: 0; }
+  }
+
+  /* ---------- Footer ---------- */
+
+  .site-footer {
+    margin-top: 60px;
+    background: #131210;
+    color: #cac8c1;
+    padding: 79px 0;
+  }
+
+  .footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 0.85rem;
+  }
+
+  .footer-links { display: flex; gap: 22px; }
+  .footer-links a { text-decoration: none; color: #cac8c1; transition: color 0.15s ease; }
+  .footer-links a:hover { color: #fff; }
+
+  .footer-dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .footer-dropdown > a {
+    position: relative;
+    padding: 4px 6px;
+    margin: -4px -6px;
+    border-radius: 6px;
+    background: transparent;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+
+  .footer-dropdown:hover > a,
+  .footer-dropdown:focus-within > a {
+    background: #131210;
+  }
+
+  .footer-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    padding-top: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(-4px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    z-index: 50;
+  }
+
+  .footer-dropdown-menu-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    margin: -8px -12px;
+    border-radius: 8px;
+    background: #131210;
+  }
+
+  .footer-dropdown-menu-inner a {
+    font-size: 0.85rem;
+    color: #cac8c1;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .footer-dropdown-menu-inner a:hover {
+    color: #fff;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .footer-dropdown:hover .footer-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  .footer-dropdown:focus-within .footer-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .footer-meta { color: #cac8c1; }
+
+  @media (max-width: 620px) {
+    .footer-row { justify-content: flex-start; }
+  }
+
+  /* ---------- Project detail overlay (POC) ---------- */
+
+  .project-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: var(--bg);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(18px);
+    padding-bottom: 40px;
+    transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.35s;
+  }
+
+  .project-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html.overlay-locked,
+  html.overlay-locked body {
+    overflow: hidden;
+  }
+
+  .po-bottombar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 501;
+    background: var(--bg);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+  }
+
+  .po-bottombar.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.25s ease;
+  }
+
+  .po-scroll-progress {
+    height: 1px;
+    background: var(--line);
+  }
+
+  .po-scroll-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--ink-soft);
+  }
+
+  .po-bottombar-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 8px 40px 8px 22px;
+  }
+
+  .po-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font: inherit;
+    font-size: 0.78rem;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--ink-soft);
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0;
+    transition: color 0.15s ease, gap 0.15s ease;
+  }
+
+  .po-back:hover { color: var(--ink); gap: 8px; }
+
+  .project-overlay-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 56px 40px 60px;
+    display: grid;
+    grid-template-columns: 130px minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+
+  .po-rail {
+    position: sticky;
+    top: 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .po-rail-item {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .po-rail-item:hover { color: var(--ink-soft); }
+
+  .po-rail-item.is-active {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  @media (max-width: 1024px) {
+    .project-overlay-inner { grid-template-columns: 1fr; }
+    .po-rail {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin: 0 0 36px;
+    }
+  }
+
+  .po-title-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    margin: 0 0 24px;
+  }
+
+  .po-title-main {
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+    color: var(--ink);
+  }
+
+  .po-title-dot {
+    color: var(--ink-faint);
+    font-size: 1.3rem;
+  }
+
+  .po-title-tagline {
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+    color: var(--ink-faint);
+  }
+
+  .po-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 0 0 28px;
+  }
+
+  .po-hero {
+    width: 100%;
+    max-width: 780px;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 0 0 28px;
+  }
+
+  .po-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .po-intro {
+    font-size: 0.98rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    max-width: 68ch;
+    margin: 0 0 28px;
+    font-weight: 300;
+  }
+
+  .po-highlight { color: var(--blue); }
+
+  .po-meta {
+    margin: 0;
+  }
+
+  .po-divider-end {
+    margin: 36px 0 52px;
+  }
+
+  .po-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 48px;
+    margin: 0 0 12px;
+  }
+
+  .po-meta-row:last-child { margin-bottom: 0; }
+
+  .po-meta-pair {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .po-meta-label {
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+
+  .po-meta-value {
+    font-size: 0.92rem;
+    color: var(--ink);
+  }
+
+  .po-section {
+    max-width: 780px;
+    margin: 0 0 46px;
+    scroll-margin-top: 100px;
+  }
+
+  .po-section-num {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 20px;
+  }
+
+  .po-section-num::before {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .po-section-title {
+    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+    line-height: 1.2;
+    margin: 0 0 18px;
+  }
+
+  .po-section-body p {
+    color: var(--ink-soft);
+    font-weight: 300;
+    margin: 0 0 16px;
+  }
+
+  .po-section-body strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .po-media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 28px 0;
+  }
+
+  .po-media-ph {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.01em;
+  }
+
+  .po-media-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .po-media-row-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .po-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 5px;
+  }
+
+  .po-media-photos .po-media { aspect-ratio: 1 / 1; }
+
+  /* Technical drawings/sketches: show the whole image at its own aspect
+     ratio (set inline per figure) instead of cropping to fit a fixed box. */
+  .po-media-contain img { object-fit: contain; }
+
+  .po-media-chart { aspect-ratio: 1190 / 721; }
+  .po-media-chart img { object-fit: contain; }
+
+  @media (max-width: 620px) {
+    .po-media-row,
+    .po-media-row-3 { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 1060px) {
+    #sn-fin-compare-row > figure { max-width: 100% !important; }
+  }
+
+  #kl-constraints .po-section-body,
+  #kl-process .po-section-body { max-width: 780px; }
+
+  @media (max-width: 1000px) {
+    #kl-mea-compare-row > figure { max-width: 100% !important; }
+  }
+
+  @media (max-width: 1060px) {
+    #kl-shield-compare-row > figure { max-width: 100% !important; }
+  }
+
+  .po-figure {
+    margin: 28px 0 0;
+  }
+
+  .po-media-row .po-figure { margin: 0; }
+
+  .po-figure .po-media { margin: 0; }
+
+  .po-figcaption {
+    font-size: 0.76rem;
+    font-weight: 300;
+    color: var(--ink-faint);
+    line-height: 1.45;
+    margin: 8px 0 0;
+  }
+
+  .po-subsection {
+    margin: 0 0 34px;
+  }
+
+  .po-subsection:last-child { margin-bottom: 0; }
+
+  .po-subsection-title {
+    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    font-size: 1.15rem;
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 0 0 12px;
+  }
+
+  .po-stat-unit {
+    font-size: 0.6em;
+  }
+
+  #sn-outcome { max-width: none; }
+
+  #po-build { max-width: none; }
+  #po-build .po-section-body { max-width: 780px; }
+
+  .po-media-3x2 .po-media { aspect-ratio: 3 / 2; }
+
+  .po-media-portrait-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+    margin: 28px 0 0;
+  }
+
+  .po-media-portrait-row .po-figure { margin: 0; }
+
+  .po-media-portrait-row img,
+  .po-media-portrait-row video {
+    display: block;
+    height: 440px;
+    width: auto;
+    max-width: 100%;
+    border-radius: 5px;
+    background: var(--bg-panel);
+  }
+
+  .po-media-portrait-row-tall img,
+  .po-media-portrait-row-tall video { height: 560px; }
+
+  .po-media-portrait-row .po-media {
+    width: 330px;
+    height: 440px;
+    margin: 0;
+  }
+
+  @media (max-width: 620px) {
+    .po-media-portrait-row { flex-direction: column; }
+    .po-media-portrait-row img,
+    .po-media-portrait-row video { height: auto; width: 100%; }
+  }
+
+  #po-build .po-media-row { max-width: 1000px; }
+
+  #po-results { max-width: none; }
+
+  .po-results-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 0.440fr;
+    gap: 24px;
+    align-items: start;
+    margin: 0;
+  }
+
+  .po-results-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  /* Fixed measures keep the left column's height constant as the page resizes,
+     so the portrait video stays aligned with it at every width. */
+  .po-results-main .po-conclusion { margin: 0; }
+
+  .po-video { margin: 0; }
+
+  .po-video video {
+    display: block;
+    border-radius: 5px;
+    background: var(--bg-panel);
+  }
+
+  .po-video-landscape { margin-top: 32px; }
+
+  .po-conclusion {
+    font-size: 1.02rem;
+    line-height: 1.7;
+    font-weight: 300;
+    color: var(--ink-soft);
+    max-width: 68ch;
+    margin: 0;
+  }
+
+  /* two classes so it beats the shared single-class .po-stats max-width */
+  .po-stats.po-stats-wide {
+    max-width: none;
+    margin-top: 64px;
+  }
+
+  .po-closing-image {
+    margin: 56px 0 0;
+  }
+
+  /* bottom of the SharkNinja page tracks the width of the copy above it */
+  #sn-outcome .po-stats,
+  #sn-outcome .po-closing-image { max-width: 68ch; }
+
+  .po-closing-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+
+  .po-video-landscape video {
+    width: 100%;
+    height: auto;
+  }
+
+  .po-video-portrait video {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  @media (max-width: 1180px) {
+    .po-results-grid { grid-template-columns: 1fr; }
+    .po-video-portrait { margin-top: 28px; }
+    .po-video-portrait video { height: auto; max-height: 62vh; }
+  }
+
+
+  .po-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 780px;
+    margin: 8px 0 0;
+  }
+
+  @media (max-width: 620px) {
+    .po-stats { grid-template-columns: 1fr; gap: 24px; }
+  }
+
+  .po-stat {
+    border-left: 3px solid var(--blue);
+    padding-left: 16px;
+  }
+
+  .po-stat-num {
+    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    font-size: 1.9rem;
+    line-height: 1.1;
+    margin: 0 0 6px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .po-stat-label {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    font-weight: 300;
+  }
+
+  @media (max-width: 820px) {
+    .project-overlay-inner { padding: 40px 24px 40px; }
+    .po-bottombar-inner { padding: 8px 24px 8px 16px; }
+  }
+
+</style>
+</head>
+<body>
+<nav class="site-nav" id="siteNav" aria-label="Primary">
+  <a class="logo" href="#top" aria-label="Home">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 13.5c.04-.5.04-1 0-1.5l1.9-1.5-2-3.5-2.3.7c-.4-.35-.85-.65-1.35-.9L15.2 4h-4l-.4 2.35c-.5.25-.95.55-1.35.9l-2.3-.7-2 3.5 1.9 1.5c-.04.5-.04 1 0 1.5l-1.9 1.5 2 3.5 2.3-.7c.4.35.85.65 1.35.9L11.2 20h4l.4-2.35c.5-.25.95-.55 1.35-.9l2.3.7 2-3.5-1.9-1.5Z"/>
+    </svg>
+    <span class="logo-word">Ethan Tran</span>
+  </a>
+  <div class="nav-links">
+    <a href="#work">work</a>
+    <a href="#projects">projects</a>
+    <a href="#about">about</a>
+    <span class="nav-combo">
+      <span class="nav-dropdown">
+        <button type="button" class="nav-dropdown-trigger">resume</button>
+        <span class="nav-dropdown-menu">
+          <span class="nav-dropdown-menu-inner">
+            <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering<span class="ext-arrow" aria-hidden="true">↗</span></a>
+            <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product<span class="ext-arrow" aria-hidden="true">↗</span></a>
+          </span>
+        </span>
+      </span> / <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin<span class="ext-arrow" aria-hidden="true">↗</span></a>
+    </span>
+  </div>
+</nav>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-row">
+      <div class="hero-photo">
+        <span>Add your photo</span>
+        <img src="assets/home/photo-of-me.jpg" alt="Ethan Tran" onload="this.previousElementSibling.style.display='none'">
+      </div>
+      <div class="hero-text">
+        <h1 class="hero-title serif"><span class="visually-hidden">Hi! I'm Ethan Tran.</span><span class="hero-title-typed" aria-hidden="true"></span></h1>
+        <p class="hero-sub">Mechanical engineer with industry experience in medical devices and consumer tech, having driven hardware from prototype through launch. Currently exploring how that experience bridges into product and tech.</p>
+      </div>
+      <div class="hero-record">
+        <button type="button" class="record-player" id="recordPlayer" aria-pressed="false" aria-label="Play background music">
+          <svg viewBox="0 0 200 200" class="rp-svg" aria-hidden="true">
+            <defs>
+              <clipPath id="vinylClip"><circle cx="100" cy="100" r="94"></circle></clipPath>
+            </defs>
+            <g class="rp-vinyl">
+              <image href="assets/home/vinyl-label.jpg" x="6" y="6" width="188" height="188" clip-path="url(#vinylClip)" preserveAspectRatio="xMidYMid slice"></image>
+              <circle cx="100" cy="100" r="94" class="rp-disc-ring"></circle>
+            </g>
+          </svg>
+        </button>
+        <p class="rp-track-info"><svg class="rp-track-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg><span>Skating &middot; Vince Guaraldi Trio</span></p>
+        <div class="rp-volume">
+          <svg class="rp-volume-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 9v6h4l5 5V4L8 9H4zm11.5 3a3.5 3.5 0 0 0-2-3.16v6.32a3.5 3.5 0 0 0 2-3.16zm-2-6.9v2.06c2.3.83 4 3.02 4 5.84s-1.7 5.01-4 5.84v2.06c3.4-.87 6-3.94 6-7.9s-2.6-7.03-6-7.9z"></path></svg>
+          <input type="range" class="rp-volume-slider" id="rpVolumeSlider" min="0" max="1" step="0.01" value="0.55" aria-label="Music volume">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <p class="section-label">Work</p>
+
+      <div class="reveal tile-grid">
+        <div class="proj-tile" tabindex="0" data-cursor-label="coming soon">
+          <span class="proj-tile-fallback">Scientific Horizons</span>
+          <img class="proj-tile-img proj-tile-img-logo" src="assets/home/coming-soon-blur-1.png" alt="" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
+          <span class="proj-tile-status">Jun 2026 – Present</span>
+          <div class="proj-tile-tags">
+            <span class="tag">Scientific Horizons</span>
+            <span class="tag">Medical device</span>
+            <span class="tag">Intern</span>
+          </div>
+        </div>
+        <div class="proj-tile" tabindex="0" data-cursor-label="see work" data-project="sharkninja">
+          <span class="proj-tile-fallback">SharkNinja</span>
+          <img class="proj-tile-img" src="assets/home/sharkninja-cover.jpg" alt="" onerror="this.style.display='none'" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
+          <span class="proj-tile-status">Jan – Jun 2026</span>
+          <div class="proj-tile-tags">
+            <span class="tag">SharkNinja</span>
+            <span class="tag">Consumer product</span>
+            <span class="tag">Co-op</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <p class="section-label">Projects</p>
+
+      <h3 class="proj-sub-title">Engineering</h3>
+      <div class="reveal tile-grid tile-grid-3">
+        <div class="proj-tile" tabindex="0" data-cursor-label="coming soon">
+          <span class="proj-tile-fallback">UCI HyperXite</span>
+          <img class="proj-tile-img" src="assets/home/coming-soon-blur-2.jpg" alt="" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
+          <img class="proj-tile-logo proj-tile-logo-sm" src="assets/home/hyperxite-cover.jpg" alt="UCI HyperXite">
+          <span class="proj-tile-status">Jul 2026 – Present</span>
+          <div class="proj-tile-tags">
+            <span class="tag">UCI HyperXite</span>
+            <span class="tag">Braking Engineer</span>
+          </div>
+        </div>
+        <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="solar-car">
+          <span class="proj-tile-fallback">UCI Solar Car</span>
+          <img class="proj-tile-img" src="assets/home/solar-car-cover.jpg" alt="" onerror="this.style.display='none'" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
+          <img class="proj-tile-logo" src="assets/home/solar-car-logo.png" alt="ZotSun Solar Racing">
+          <span class="proj-tile-status">Apr 2025 – Jun 2026</span>
+          <div class="proj-tile-tags">
+            <span class="tag">UCI Solar Car</span>
+            <span class="tag">Suspension Engineer</span>
+          </div>
+        </div>
+        <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="keyak-lab">
+          <span class="proj-tile-fallback">UCI Keyak Lab</span>
+          <img class="proj-tile-img" src="assets/home/keyak-lab-cover.jpg" alt="" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
+          <span class="proj-tile-status">Feb 2025 – Jun 2026</span>
+          <div class="proj-tile-tags">
+            <span class="tag">UCI Keyak Lab</span>
+            <span class="tag">Undergraduate Researcher</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal tile-grid tile-grid-4 tile-grid-mini">
+        <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="autonomous-rover">
+          <span class="proj-tile-fallback">Autonomous Rover</span>
+          <img class="proj-tile-img" src="assets/home/autonomous-rover-cover.jpg" alt="" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
+          <span class="proj-tile-status">Jan – Mar 2025</span>
+          <div class="proj-tile-tags">
+            <span class="tag">Autonomous Rover</span>
+            <span class="tag">Lead Mechanical Engineer</span>
+          </div>
+        </div>
+        <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="rc-drone">
+          <span class="proj-tile-fallback">RC Drone</span>
+          <img class="proj-tile-img" src="assets/home/rc-drone-cover.jpg" alt="" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
+          <span class="proj-tile-status">Jan – Jun 2025</span>
+          <div class="proj-tile-tags">
+            <span class="tag">RC Drone</span>
+            <span class="tag">Lead Design Engineer</span>
+          </div>
+        </div>
+        <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="rc-rover">
+          <span class="proj-tile-fallback">RC Rover</span>
+          <img class="proj-tile-img" src="assets/home/rc-rover-cover.jpg" alt="" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
+          <span class="proj-tile-status">Sept – Dec 2024</span>
+          <div class="proj-tile-tags">
+            <span class="tag">RC Rover</span>
+            <span class="tag">R&amp;D Engineer</span>
+          </div>
+        </div>
+        <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="cad-projects">
+          <span class="proj-tile-fallback">CAD Projects</span>
+          <img class="proj-tile-img proj-tile-img-logo" src="assets/cad-projects/zekrom-thumbnail.png">
+          <div class="proj-tile-tags">
+            <span class="tag">CAD Projects</span>
+            <span class="tag">Personal Project</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="proj-sub-title">Product</h3>
+      <div class="reveal tile-grid tile-grid-1 tile-grid-mini">
+        <div class="proj-tile" tabindex="0" data-cursor-label="coming soon">
+          <span class="proj-tile-fallback">Coming soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <p class="section-label">About</p>
+      <h2 class="section-title reveal">More about me.</h2>
+
+      <div class="reveal about-grid">
+        <div class="about-bio">
+          <p class="about-meta">🎓 B.S. Mechanical Engineering @ UC Irvine · June 2028</p>
+          <p>
+            Throughout my time in engineering, my strengths have been my
+            product-driven mindset and a user-centric approach to design.
+            I prioritize solving the right problem for the user before we
+            ever dive into building the solution.
+          </p>
+          <p>
+            Currently, I am conducting verification &amp; validation for
+            novel medical devices at
+            <a class="tl-org" href="https://scientifichorizonsconsulting.com/" target="_blank" rel="noopener">Scientific Horizons</a>
+            and am developing a hyperloop pod with
+            <a class="tl-org" href="https://www.hyperxite.com/" target="_blank" rel="noopener">UCI HyperXite</a>. In
+            the past, I've driven a
+            <a class="tl-org" href="https://www.sharkninja.com/shark-transformer-true-pet-upright-vacuum/LX501UPG1.html?srsltid=AfmBOorRaLxzxJF5QeWAtc9ctzGsa9H2jHhbevrdT3beR6wbPpgLCJSe" target="_blank" rel="noopener">flagship vacuum</a>
+            to production at
+            <a class="tl-org" href="https://sharkninja.com/" target="_blank" rel="noopener">SharkNinja</a>
+            through iterative prototyping and testing and built UCI's
+            first-ever solar car with
+            <a class="tl-org" href="https://www.ucisolarcar.org/" target="_blank" rel="noopener">UCI Solar Car</a>.
+          </p>
+          <p>
+            In my free time, you'll find me plugged into
+            <a class="tl-org" href="https://open.spotify.com/user/jxa6bvxrn1p79qr8qqoqoi1dm?si=65a5718952c04992" target="_blank" rel="noopener">Spotify</a>
+            while staying active with climbing 🧗, basketball 🏀, volleyball
+            🏐, and pickleball 🏓, or messing around on the piano 🎹. Most
+            importantly, I'm always down to chat (especially about the
+            Lob City Clippers or all things music)!
+          </p>
+        </div>
+        <div class="about-gallery" aria-hidden="true">
+          <div class="gallery-photo gp-1"><span class="gallery-photo-ph">+ photo</span></div>
+          <div class="gallery-photo gp-2"><span class="gallery-photo-ph">+ photo</span></div>
+          <div class="gallery-photo gp-3"><span class="gallery-photo-ph">+ photo</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 Ethan Tran</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin</a>
+        <span class="footer-dropdown">
+          <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">resume</a>
+          <span class="footer-dropdown-menu">
+            <span class="footer-dropdown-menu-inner">
+              <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering</a>
+              <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product</a>
+            </span>
+          </span>
+        </span>
+        <a href="mailto:ethandtran06@gmail.com">email</a>
+      </div>
+      <span class="footer-meta"><span>Los Angeles/Orange County</span> &middot; <span class="js-clock">--:--:--</span></span>
+    </div>
+  </footer>
+</main>
+
+<div class="project-overlay" id="projectOverlay" data-project-panel="solar-car" role="dialog" aria-modal="true" aria-label="UCI Solar Car project detail">
+  <div class="project-overlay-inner">
+    <nav class="po-rail" aria-label="Section progress">
+      <a class="po-rail-item" href="#po-context" data-po-target="po-context">Context</a>
+      <a class="po-rail-item" href="#po-build" data-po-target="po-build">Build</a>
+      <a class="po-rail-item" href="#po-problem" data-po-target="po-problem">Problem</a>
+      <a class="po-rail-item" href="#po-process" data-po-target="po-process">Process</a>
+      <a class="po-rail-item" href="#po-results" data-po-target="po-results">Results</a>
+    </nav>
+
+    <div class="po-main">
+      <div id="po-context">
+      <h1 class="po-title-row">
+        <span class="po-title-main">UCI Solar Car</span>
+      </h1>
+
+      <div class="po-divider"></div>
+
+      <div class="po-hero" data-hero-for="solar-car"></div>
+
+      <p class="po-intro">
+        UCI Solar Car is a student-run senior design team that designs,
+        builds, and races a solar-powered vehicle over a two-year cycle to
+        compete in the Formula Sun Grand Prix and the American Solar
+        Challenge. I joined the team in Spring 2025, during which they were in
+        the late-stage manufacturing stages. In preparation for FSGP 2025,
+        my focus was streamlining assembly and integration of the
+        suspension system under tight deadlines.
+      </p>
+
+      <div class="po-divider"></div>
+
+      <div class="po-meta">
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">role</span><span class="po-meta-value">Suspension Engineer</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">team</span><span class="po-meta-value">~20 MAE, ~20 EE/CSE, 2 PM</span></span>
+        </div>
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">timeline</span><span class="po-meta-value">Apr 2025 &ndash; Jun 2026</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">tools</span><span class="po-meta-value">SolidWorks, 3D Printing, Laser Cutting</span></span>
+        </div>
+      </div>
+
+      <div class="po-divider po-divider-end"></div>
+      </div>
+
+    <section class="po-section" id="po-build">
+      <p class="po-section-num">01 &middot; Build</p>
+      <h2 class="po-section-title">Designing a welding jig for steering column integration</h2>
+      <div class="po-section-body">
+        <p>
+          The steering column had to be welded to the chassis in a fixed
+          position, and we had no jig to hold it there. I designed one,
+          starting with a wooden assembly that fit together like puzzle
+          pieces inside the chassis frame. Through iteration I found that
+          repurposing material we already had on hand was the most effective
+          approach, cutting both material waste and production time.
+          The column went on cleanly, and the rest of the team stayed
+          focused on integrating other subsystems.
+        </p>
+      </div>
+      <div class="po-media-row po-media-3x2">
+        <figure class="po-figure">
+          <div class="po-media"><img src="assets/solar-car/cad-initial-prototype.jpg" alt="CAD model of the chassis with the wooden welding jig in place"></div>
+          <figcaption class="po-figcaption">CAD of initial prototype</figcaption>
+        </figure>
+        <figure class="po-figure">
+          <div class="po-media"><img src="assets/solar-car/final-welding-jig.jpg" alt="The finished welding jig holding the steering column on the chassis"></div>
+          <figcaption class="po-figcaption">Final welding jig + steering column</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="po-section" id="po-problem">
+      <p class="po-section-num">02 &middot; Problem</p>
+      <h2 class="po-section-title">Reflecting on FSGP 2025</h2>
+      <div class="po-section-body">
+        <p>
+          At the 2025 Formula Sun Grand Prix, last-minute issues with other
+          vehicle systems kept the car off the track for most of the event.
+          The team worked through them, cleared every screening station, and
+          got the car running the dynamic courses on the final day. That was
+          the first real look at how the suspension held up under race
+          conditions. The car's turning radius was too wide to take the
+          figure-eight cleanly, and that became the starting point for the
+          following quarter.
+        </p>
+      </div>
+    </section>
+
+    <section class="po-section" id="po-process">
+      <p class="po-section-num">03 &middot; Process</p>
+      <h2 class="po-section-title">Two fixes over the following quarter</h2>
+
+      <div class="po-subsection">
+        <h3 class="po-subsection-title">Tracing a wide turning radius to rotor interference</h3>
+        <div class="po-section-body">
+          <p>
+            Working back from the wide turning radius, I traced it to
+            interference between the rotor and the control arm during
+            turns. After verifying the control arm's structural
+            integrity, I shaved it down to open up rotor clearance,
+            increasing the steering angle from 12&deg; to 17&deg;.
+          </p>
+        </div>
+        <div class="po-media-row po-media-photos">
+          <figure class="po-figure">
+            <div class="po-media"><img src="assets/solar-car/before-shaving.jpg" alt="Rotor contacting the control arm before the fix"></div>
+            <figcaption class="po-figcaption">Before: interference between rotor and control arm during turning</figcaption>
+          </figure>
+          <figure class="po-figure">
+            <div class="po-media"><img src="assets/solar-car/after-shaving.jpg" alt="Shaved control arm giving the rotor clearance"></div>
+            <figcaption class="po-figcaption">After: shaved down control arm for a bigger turning radius</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="po-subsection">
+        <h3 class="po-subsection-title">Replacing washer stacks with printed spacers</h3>
+        <div class="po-section-body">
+          <p>
+            The control arms were held between their mounting tabs by stacks
+            of washers, an improvised fix that made every reassembly
+            slightly different and let the suspension geometry drift. I
+            measured the car and prototyped 3D-printed spacers to replace
+            them, giving them a conical geometry so the rod-end bearings kept
+            a wider range of motion. After iterating across multiple sizes, I
+            produced engineering drawings for a final set that preserved the
+            original geometry while making assembly repeatable.
+          </p>
+        </div>
+        <div class="po-media-row po-media-row-3 po-media-photos">
+          <figure class="po-figure">
+            <div class="po-media"><img src="assets/solar-car/before-spacers.jpg" alt="Washer stacks holding the control arm between its tabs"></div>
+            <figcaption class="po-figcaption">Before: washer stacks between the tabs</figcaption>
+          </figure>
+          <figure class="po-figure">
+            <div class="po-media"><img src="assets/solar-car/spacer-prototypes.jpg" alt="3D printed conical spacers fitted in place of the washers"></div>
+            <figcaption class="po-figcaption">After: 3D printed prototypes to check fit</figcaption>
+          </figure>
+          <figure class="po-figure">
+            <div class="po-media"><img src="assets/solar-car/after-spacers.jpg" alt="Final manufactured spacers being installed"></div>
+            <figcaption class="po-figcaption">Final manufactured spacers</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="po-section" id="po-results">
+      <p class="po-section-num">04 &middot; Results</p>
+      <h2 class="po-section-title">FSGP 2026</h2>
+
+      <div class="po-results-grid">
+        <div class="po-results-main">
+          <p class="po-conclusion">
+            During my time with the team, I helped ensure that previously
+            designed parts were actually buildable. Instead of optimizing for
+            what looked clean in CAD, I prioritized what the team could actually
+            fabricate and reassemble under deadline. That shift drove multiple
+            measurable changes: 80% less material on the welding jig, 75% off
+            control arm assembly time across 20+ printed prototypes, and a 25%
+            increase in steering angle from root cause analysis on the
+            suspension system. In 2025, we barely cleared technical inspection
+            on the final day. Fast forward a year later in 2026, and we were the
+            first team to complete it.
+          </p>
+          <figure class="po-video po-video-landscape">
+            <video src="assets/solar-car/race-start.mp4" muted playsinline controls preload="metadata"></video>
+            <figcaption class="po-figcaption">First car onto the track at the start from pole position</figcaption>
+          </figure>
+        </div>
+
+        <figure class="po-video po-video-portrait">
+          <video src="assets/solar-car/100th-lap.mp4" muted playsinline controls preload="metadata"></video>
+          <figcaption class="po-figcaption">Crossing the 100th lap</figcaption>
+        </figure>
+      </div>
+
+      <div class="po-stats po-stats-wide">
+        <div class="po-stat">
+          <p class="po-stat-num">P1</p>
+          <p class="po-stat-label">starting grid position, first car to pass scrutineering</p>
+        </div>
+        <div class="po-stat">
+          <p class="po-stat-num">10<span class="po-stat-unit">th</span> of 29</p>
+          <p class="po-stat-label">in the single occupancy vehicle class</p>
+        </div>
+        <div class="po-stat">
+          <p class="po-stat-num">353<span class="po-stat-unit"> mi</span></p>
+          <p class="po-stat-label">raced across 114 laps</p>
+        </div>
+      </div>
+    </section>
+
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 Ethan Tran</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin</a>
+        <span class="footer-dropdown">
+          <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">resume</a>
+          <span class="footer-dropdown-menu">
+            <span class="footer-dropdown-menu-inner">
+              <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering</a>
+              <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product</a>
+            </span>
+          </span>
+        </span>
+        <a href="mailto:ethandtran06@gmail.com">email</a>
+      </div>
+      <span class="footer-meta"><span>Los Angeles/Orange County</span> &middot; <span class="js-clock">--:--:--</span></span>
+    </div>
+  </footer>
+</div>
+
+<div class="project-overlay" id="projectOverlaySharkninja" data-project-panel="sharkninja" role="dialog" aria-modal="true" aria-label="SharkNinja project detail">
+  <div class="project-overlay-inner">
+    <nav class="po-rail" aria-label="Section progress">
+      <a class="po-rail-item" href="#sn-context" data-po-target="sn-context">Context</a>
+      <a class="po-rail-item" href="#sn-problem" data-po-target="sn-problem">Problem</a>
+      <a class="po-rail-item" href="#sn-process" data-po-target="sn-process">Process</a>
+      <a class="po-rail-item" href="#sn-solution" data-po-target="sn-solution">Solution</a>
+      <a class="po-rail-item" href="#sn-legacy" data-po-target="sn-legacy">Failure Analysis</a>
+      <a class="po-rail-item" href="#sn-initiative" data-po-target="sn-initiative">Personal Project</a>
+      <a class="po-rail-item" href="#sn-outcome" data-po-target="sn-outcome">Reflection</a>
+    </nav>
+
+    <div class="po-main">
+      <div id="sn-context">
+      <h1 class="po-title-row">
+        <span class="po-title-main">SharkNinja</span>
+      </h1>
+
+      <div class="po-divider"></div>
+
+      <div class="po-hero"><img src="assets/sharkninja/header.jpg" alt="The Shark Transformer hand vacuum cleaning pet hair from a couch"></div>
+
+      <p class="po-intro">
+        SharkNinja is an American product design and technology company that
+        makes household appliances and cleaning tools. When I started my Co-op
+        there, they were in the final stages of launching the
+        <a class="tl-org" href="https://www.sharkninja.com/shark-transformer-true-pet-upright-vacuum/LX501UPG1.html" target="_blank" rel="noopener">Shark Transformer</a>,
+        which is the first 3-in-1 corded vacuum with an auto-empty system. I
+        joined the Shark Corded NPD Team for six months, working across
+        prototyping, failure analysis, and design for products at every stage
+        between concept and mass production. Alongside that, I took on project
+        management across the product development lifecycle for several SKUs, most
+        notably as engineering lead on the
+        <a class="tl-org" href="https://www.costco.com/p/-/shark-navigator-lift-away-upright-vacuum-with-reveal-technology/4201031429" target="_blank" rel="noopener">Shark Navigator</a>.
+      </p>
+
+      <div class="po-divider"></div>
+
+      <div class="po-meta">
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">role</span><span class="po-meta-value">Mechanical Engineering Co-op</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">core team</span><span class="po-meta-value">4 engineers (US), 1 ID, 2 PMs, 1 TPM</span></span>
+        </div>
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">timeline</span><span class="po-meta-value">Jan &ndash; Jun 2026</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">tools</span><span class="po-meta-value">SolidWorks, Creo, Arduino, 3D Printing</span></span>
+        </div>
+      </div>
+
+      <div class="po-divider po-divider-end"></div>
+      </div>
+
+    <section class="po-section" id="sn-problem">
+      <p class="po-section-num">01 &middot; Problem</p>
+      <h2 class="po-section-title">Short of spec, and short of proof</h2>
+      <div class="po-section-body">
+        <p>
+          The auto-empty system was the Transformer's headline feature, and it
+          was falling short of performance metrics set by product managers,
+          which were relative to our cordless SKUs already on the market.
+        </p>
+        <p>
+          However, an even bigger problem sat underneath that one. Test results
+          were inconsistent from run to run, so there was no dependable way to
+          tell whether a given prototype was actually better or whether the
+          number had just moved. Until that was fixed, every design change was
+          a guess.
+        </p>
+      </div>
+    </section>
+
+    <section class="po-section" id="sn-process" style="max-width: 1010px;">
+      <p class="po-section-num">02 &middot; Process</p>
+      <h2 class="po-section-title">Three decisions, one feature</h2>
+      <div class="po-section-body">
+        <p>
+          <strong>Decision 1: Fix the test before touching the
+          design.</strong> Results were inconsistent enough that nobody could
+          separate a real improvement from run-to-run variation, and small
+          differences in how a test is set up move the numbers a lot. I wrote
+          documentation defining exactly how each test should be conducted,
+          then worked with the engineers in China running them to quality
+          control their results against it. That gave the team one fixed basis
+          to compare against, so everything after this point could be judged on
+          data instead of noise.
+        </p>
+        <p>
+          <strong>Decision 2: Solve it inside the dust cup.</strong> By the
+          time I picked the problem up, most of the vacuum was already locked,
+          and reworking anything upstream would have meant new tooling the
+          program couldn't justify. So I confined the solution to the one area
+          still open. Across 15+ prototypes in SolidWorks and Creo I learned how
+          debris actually moved inside the hand vacuum's dust cup during an
+          auto-empty cycle, and landed on a fin geometry that redirected it
+          toward the evacuation path: fast to implement, no tooling impact
+          elsewhere, and the best auto-empty performance of anything tested.
+        </p>
+        <p>
+          <strong>Decision 3: Treat manufacturing as part of the
+          design.</strong> A geometry that works on a prototype only counts if
+          it survives production. We built overmolding into the fin to absorb
+          small tolerance variations between parts. Those gaps matter more than
+          they sound: fine debris like hair catches in them and accumulates,
+          and once that happens the auto-empty system stops evacuating
+          properly. Working it out with the manufacturing team meant catching
+          problems like that while they were still cheap to fix, rather than
+          after the product reached the market.
+        </p>
+      </div>
+      <div class="po-media-row" id="sn-fin-compare-row" style="display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap;">
+        <figure class="po-figure" style="max-width: 290px; margin: 0; flex: none;">
+          <img style="display: block; width: 100%; height: auto;" src="assets/sharkninja/fin-prototype.jpg" alt="3D-printed prototype of the fin">
+          <figcaption class="po-figcaption">3D-printed prototype of the fin</figcaption>
+        </figure>
+        <figure class="po-figure po-media-contain" style="max-width: 482px; margin: 0; flex: none;">
+          <div class="po-media" style="aspect-ratio: 1400 / 788;"><img src="assets/sharkninja/final-fin.jpg" alt="The final manufactured fin, installed and ready"></div>
+          <figcaption class="po-figcaption">The final manufactured fin</figcaption>
+        </figure>
+        </div>
+        <div class="po-media-row" style="max-width: 780px; margin-top: 40px;">
+        <figure class="po-figure">
+          <video style="display: block;" src="assets/sharkninja/autoempty-fail.mp4" muted playsinline controls preload="metadata"></video>
+          <figcaption class="po-figcaption">Before: auto-empty failing without the fin</figcaption>
+        </figure>
+        <figure class="po-figure">
+          <video style="width: 270px; height: 480px; object-fit: cover; display: block;" src="assets/sharkninja/autoempty-pass.mp4" muted playsinline controls preload="metadata"></video>
+          <figcaption class="po-figcaption">After: auto-empty passing with the fin added</figcaption>
+        </figure>
+        </div>
+    </section>
+
+    <section class="po-section" id="sn-solution">
+      <p class="po-section-num">03 &middot; Solution</p>
+      <h2 class="po-section-title">Proving the fix held up</h2>
+      <div class="po-section-body">
+        <p>
+          The fin exceeded the debris capacity KPI by 25% and cleared the
+          auto-empty system for production launch. The testing protocol
+          outlasted the project, giving the team a repeatable basis for
+          comparing results on everything that came after it.
+        </p>
+        <p>
+          However, clearing the auto-empty KPI wasn't enough on its own. To
+          ensure that the fin didn't introduce any trade-offs, I ran tests to
+          measure airwatts, which are a unit of measurement for vacuum
+          suction and cleaning efficiency. I then compared units with and
+          without the fin installed, and the results landed within margin of
+          each other, confirming the fin fixed the auto-empty system without
+          sacrificing suction performance.
+        </p>
+      </div>
+      <figure class="po-figure">
+        <div class="po-media po-media-chart"><img src="assets/sharkninja/airwatts-graph.png" alt="Airwatt measurements with and without the fin"></div>
+        <figcaption class="po-figcaption">Airwatt measurements with and without the fin</figcaption>
+      </figure>
+    </section>
+
+    <section class="po-section" id="sn-legacy">
+      <p class="po-section-num">04 &middot; Failure Analysis</p>
+      <h2 class="po-section-title">Tracing a failure to its source</h2>
+      <div class="po-section-body">
+        <p>
+          The same approach closed out root cause action items on a legacy SKU.
+          On the
+          <a class="tl-org" href="https://www.sharkninja.com/shark-rocket-turbo-corded-stick-vacuum/TV301.html" target="_blank" rel="noopener">Shark Rocket Turbo</a>,
+          an articulating squeegee failure surfaced through DFMEA was severely
+          degrading reverse cleaning. I executed testing protocols
+          targeting motor suction power and nozzle geometry, coordinated the
+          fixes across engineering, testing, and product teams, and improved
+          debris pickup efficiency by 90%.
+        </p>
+      </div>
+      <div class="po-media-portrait-row po-media-portrait-row-tall">
+        <figure class="po-figure">
+          <video src="assets/sharkninja/reverse-cleaning-before.mp4" muted playsinline controls preload="metadata"></video>
+          <figcaption class="po-figcaption">Before: poor reverse cleaning</figcaption>
+        </figure>
+        <figure class="po-figure">
+          <video src="assets/sharkninja/reverse-cleaning-after.mp4" muted playsinline controls preload="metadata"></video>
+          <figcaption class="po-figcaption">After: fixed articulating squeegee and improved reverse cleaning</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="po-section" id="sn-initiative">
+      <p class="po-section-num">05 &middot; Personal Project</p>
+      <h2 class="po-section-title">Addressing the #1 customer complaint</h2>
+      <div class="po-section-body">
+        <p>
+          The most common complaint customers have about vacuums is that
+          suction fades over time. The cause usually isn't the motor, it's
+          filters that were never cleaned. The user manual says to clean them
+          regularly, but most people never read the manual, so the instruction
+          never reaches the person who needs it.
+        </p>
+        <p>
+          On my own initiative, I built an Arduino-based differential pressure
+          system that monitors filter health and tells the user on the vacuum
+          itself, in real time, when it needs cleaning. I presented the proof
+          of concept to leadership, who approved it for further development
+          across future SKUs.
+        </p>
+      </div>
+      <div class="po-media-portrait-row">
+        <figure class="po-figure">
+          <img src="assets/sharkninja/pressure-sensor-rig.jpg" alt="The Arduino rig mounted on the vacuum, its display reading Filter Status: CLEANED">
+          <figcaption class="po-figcaption">My Arduino pressure differential rig</figcaption>
+        </figure>
+        <figure class="po-figure">
+          <video src="assets/sharkninja/live-filter-indicator.mp4" muted playsinline controls preload="metadata" aria-label="Filter health rig demo, click the speaker icon for sound"></video>
+          <figcaption class="po-figcaption">Monitoring filter health in real time</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="po-section" id="sn-outcome">
+      <p class="po-section-num">06 &middot; Reflection</p>
+      <h2 class="po-section-title">What shipped</h2>
+
+      <p class="po-conclusion">
+        During my co-op, most of my work lived in the gap between what a
+        product does on a spec sheet and how it performs in someone's home.
+        Instead of treating a passing test as a finished feature, I prioritized
+        what the customer would actually experience, and made sure we could
+        measure it consistently before calling anything solved. That drove
+        multiple measurable changes: 25% over the debris capacity KPI on the
+        auto-empty system, a 90% improvement in debris pickup on a legacy SKU,
+        and a filter health concept approved for future development. The most
+        valuable thing I learned was adopting a consumer-oriented mindset and
+        fixing any product problems before they arise.
+      </p>
+
+      <div class="po-stats po-stats-wide">
+        <div class="po-stat">
+          <p class="po-stat-num">25<span class="po-stat-unit">%</span></p>
+          <p class="po-stat-label">over the auto-empty debris capacity KPI</p>
+        </div>
+        <div class="po-stat">
+          <p class="po-stat-num">90<span class="po-stat-unit">%</span></p>
+          <p class="po-stat-label">better debris pickup on the Shark Rocket Turbo</p>
+        </div>
+        <div class="po-stat">
+          <p class="po-stat-num">$150<span class="po-stat-unit">M+</span></p>
+          <p class="po-stat-label">in forecasted annual revenue since launch</p>
+        </div>
+      </div>
+
+      <figure class="po-figure po-closing-image">
+        <img src="assets/sharkninja/reflection.jpg" alt="The Shark Transformer in use in a living room">
+      </figure>
+    </section>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 Ethan Tran</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin</a>
+        <span class="footer-dropdown">
+          <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">resume</a>
+          <span class="footer-dropdown-menu">
+            <span class="footer-dropdown-menu-inner">
+              <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering</a>
+              <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product</a>
+            </span>
+          </span>
+        </span>
+        <a href="mailto:ethandtran06@gmail.com">email</a>
+      </div>
+      <span class="footer-meta"><span>Los Angeles/Orange County</span> &middot; <span class="js-clock">--:--:--</span></span>
+    </div>
+  </footer>
+</div>
+
+<div class="project-overlay" id="projectOverlayKeyakLab" data-project-panel="keyak-lab" role="dialog" aria-modal="true" aria-label="UCI Keyak Lab project detail">
+  <div class="project-overlay-inner">
+    <nav class="po-rail" aria-label="Section progress">
+      <a class="po-rail-item" href="#kl-context" data-po-target="kl-context">Context</a>
+      <a class="po-rail-item" href="#kl-constraints" data-po-target="kl-constraints">Constraints</a>
+      <a class="po-rail-item" href="#kl-process" data-po-target="kl-process">Process</a>
+      <a class="po-rail-item" href="#kl-fabrication" data-po-target="kl-fabrication">Fabrication</a>
+      <a class="po-rail-item" href="#kl-reflection" data-po-target="kl-reflection">Reflection</a>
+    </nav>
+
+    <div class="po-main">
+      <div id="kl-context">
+      <h1 class="po-title-row">
+        <span class="po-title-main">UCI Keyak Lab</span>
+      </h1>
+
+      <div class="po-divider"></div>
+
+      <div class="po-hero" data-hero-for="keyak-lab"></div>
+
+      <p class="po-intro">
+        Dr. Joyce Keyak's biomedical engineering lab at UC Irvine is
+        exploring phosphorus-32 (P-32) beta emission therapy as an
+        alternative to conventional x-ray radiation for treating cancerous
+        tumors in the vertebrae. Because the safe radiation dose for spinal
+        neurons is still unknown, the lab needed a way to deliver precise,
+        repeatable doses of P-32 to cultured neuron cells for study. I
+        joined as an undergraduate researcher to help design the irradiation
+        chamber that makes that possible, working across CAD design and
+        fabrication to build its shielding and alignment fixtures.
+        <a class="tl-org" href="https://engineering.uci.edu/users/joyce-keyak" target="_blank" rel="noopener">More about her research</a>.
+      </p>
+
+      <div class="po-divider"></div>
+
+      <div class="po-meta">
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">role</span><span class="po-meta-value">Undergraduate Researcher</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">team</span><span class="po-meta-value">4 undergrad, 1 PI</span></span>
+        </div>
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">timeline</span><span class="po-meta-value">Feb 2025 &ndash; Jun 2026</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">tools</span><span class="po-meta-value">SolidWorks, Power Tools, Bandsaw, Drill Press</span></span>
+        </div>
+      </div>
+
+      <div class="po-divider po-divider-end"></div>
+      </div>
+
+    <section class="po-section" id="kl-constraints" style="max-width: 910px;">
+      <p class="po-section-num">01 &middot; Constraints</p>
+      <h2 class="po-section-title">Three constraints, one piece</h2>
+      <div class="po-section-body">
+        <p>
+          When I joined the lab, the team already had a preliminary design
+          for the irradiation chamber. My task was to design the shielding
+          pieces: parts that would minimize radiation exposure to personnel
+          while also securing consistent placement of the microelectrode
+          array (MEA), the surface the neuron cells are cultured on. I took
+          measurements directly from the existing CAD model so the new
+          pieces would fit inside the chamber, while satisfying three
+          constraints: holding a 90 mm petri dish at a sloped position,
+          securing a 49 x 49 mm MEA chip within the dish at a fixed position
+          and rotation, and shielding the steel screws from P-32 beta
+          emissions with at least 1/4" to 1/2" of plastic.
+        </p>
+      </div>
+      <div class="po-media-row" id="kl-mea-compare-row" style="display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+        <figure class="po-figure po-media-contain" style="width: 506px; max-width: 506px; margin: 0;">
+        <div class="po-media" style="aspect-ratio: 660 / 243;"><img src="assets/keyak-lab/mea-ring-sketch.png" alt="Hand-drawn sketch of the MEA ring dimensions"></div>
+        <figcaption class="po-figcaption">Working out the MEA ring dimensions</figcaption>
+      </figure>
+        <figure class="po-figure po-media-contain" style="width: 375px; max-width: 375px; margin: 0;">
+        <div class="po-media" style="aspect-ratio: 660 / 328;"><img src="assets/keyak-lab/shield-drawing.png" alt="CAD drawing of a shield piece with screw holes"></div>
+        <figcaption class="po-figcaption">CAD drawing of a shield piece, with holes for the screws</figcaption>
+      </figure>
+        </div>
+    </section>
+
+    <section class="po-section" id="kl-process" style="max-width: 970px;">
+      <p class="po-section-num">02 &middot; Process</p>
+      <h2 class="po-section-title">Redesigning for a round fit</h2>
+      <div class="po-section-body">
+        <p>
+          While assembling the chamber and shield pieces in SolidWorks, I
+          found that the square shape formed by the shield pieces didn't fit
+          inside the round petri dish. I couldn't just make the pieces
+          thinner either, since that would have compensated the amount of
+          shielding they provided. So I redesigned the pieces to cut the
+          corners at an angle, keeping enough plastic over the P-32 vial
+          while letting the assembly fit inside the dish. After some
+          fine-tuning, the design was ready for fabrication.
+        </p>
+      </div>
+      <div class="po-media-row" id="kl-shield-compare-row" style="display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+      <figure class="po-figure po-media-contain" style="width: 639px; max-width: 639px; margin: 0;">
+        <div class="po-media" style="aspect-ratio: 430 / 161;"><img src="assets/keyak-lab/checking-placement.png" alt="CAD assembly section view showing shield piece placement"></div>
+        <figcaption class="po-figcaption">Checking shield piece placement in the assembly</figcaption>
+      </figure>
+      <figure class="po-figure po-media-contain" style="width: 300px; max-width: 300px; margin: 0;">
+        <div class="po-media" style="aspect-ratio: 430 / 343;"><img src="assets/keyak-lab/redesigned-shield.png" alt="Orthographic drawing of the redesigned shield piece with cut corners"></div>
+        <figcaption class="po-figcaption">The redesigned shield piece, with the corners cut at an angle</figcaption>
+      </figure>
+      </div>
+    </section>
+
+    <section class="po-section" id="kl-fabrication">
+      <p class="po-section-num">03 &middot; Fabrication</p>
+      <h2 class="po-section-title">Accounting for tolerances</h2>
+      <div class="po-section-body">
+        <p>
+          I used a bandsaw to cut sheets of polycarbonate to size, then a
+          drill press to add holes for the screws, which I tapped by hand so
+          they could thread into the chamber. The angled corner cuts were
+          the hardest part to get right on the bandsaw, so after some early
+          struggles we switched to powered cutting tools, which were faster
+          and safer. Even then, the shield pieces fit inconsistently inside
+          the petri dish, since how tightly they were screwed into the
+          chamber shifted their positioning slightly. I filed down the edges
+          of each piece until they fit securely no matter their orientation.
+        </p>
+      </div>
+      <figure class="po-figure po-media-contain" style="max-width: 380px; margin: 0;">
+        <div class="po-media" style="aspect-ratio: 332 / 273;"><img src="assets/keyak-lab/fabricated-piece.png" alt="A fabricated polycarbonate shield piece"></div>
+        <figcaption class="po-figcaption">A fabricated polycarbonate shield piece</figcaption>
+      </figure>
+    </section>
+
+    <section class="po-section" id="kl-reflection">
+      <p class="po-section-num">04 &middot; Reflection</p>
+      <h2 class="po-section-title">Building without a blueprint</h2>
+      <div class="po-section-body">
+        <p>
+          This project is still in progress, but it taught me a lot about
+          working inside a research environment. Unlike a defined product
+          spec, there was no predetermined path to reach the lab's goal, so
+          a lot of the process was experimentation: design a piece, test
+          whether it held up, and adjust based on what I learned. The final
+          design for the irradiation chamber isn't locked in yet, but each
+          iteration has narrowed down what actually works. Here's the first
+          version of the shield pieces fitting inside the chamber and petri
+          dish. That habit of testing small and iterating is what introduced me to the iterative design process and attracted me to product environments.
+        </p>
+      </div>
+      <figure class="po-figure" style="max-width: 420px; margin: 0;">
+        <div class="po-media" style="aspect-ratio: 1 / 1;"><img src="assets/keyak-lab/pieces-fit-chamber.png" alt="The shield pieces and petri dish fitted inside the chamber"></div>
+        <figcaption class="po-figcaption">The shield pieces and petri dish fitted inside the chamber</figcaption>
+      </figure>
+    </section>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 Ethan Tran</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin</a>
+        <span class="footer-dropdown">
+          <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">resume</a>
+          <span class="footer-dropdown-menu">
+            <span class="footer-dropdown-menu-inner">
+              <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering</a>
+              <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product</a>
+            </span>
+          </span>
+        </span>
+        <a href="mailto:ethandtran06@gmail.com">email</a>
+      </div>
+      <span class="footer-meta"><span>Los Angeles/Orange County</span> &middot; <span class="js-clock">--:--:--</span></span>
+    </div>
+  </footer>
+</div>
+
+<div class="project-overlay" id="projectOverlayAutonomousRover" data-project-panel="autonomous-rover" role="dialog" aria-modal="true" aria-label="Autonomous Rover project detail">
+  <div class="project-overlay-inner">
+    <nav class="po-rail" aria-label="Section progress">
+      <a class="po-rail-item" href="#ar-context" data-po-target="ar-context">Context</a>
+      <a class="po-rail-item" href="#ar-design" data-po-target="ar-design">Design</a>
+      <a class="po-rail-item" href="#ar-troubleshooting" data-po-target="ar-troubleshooting">Troubleshooting</a>
+      <a class="po-rail-item" href="#ar-reflection" data-po-target="ar-reflection">Reflection</a>
+    </nav>
+
+    <div class="po-main">
+      <div id="ar-context">
+      <h1 class="po-title-row">
+        <span class="po-title-main">Autonomous Rover</span>
+      </h1>
+
+      <div class="po-divider"></div>
+
+      <div class="po-hero" data-hero-for="autonomous-rover"></div>
+
+      <p class="po-intro">
+        For ENGR 7B at UC Irvine, my team designed and built an autonomous
+        rover that could follow a predetermined path and pick up a detected
+        object, inside a $300 budget and a 12" x 16" footprint, with an
+        accessible battery switch and no sharp corners. We based the design
+        on Gleep Glorp, a viral internet meme of an edited photo of a green
+        alien cat, and I led the CAD design and
+        manufacturing.
+      </p>
+
+      <div class="po-divider"></div>
+
+      <div class="po-meta">
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">role</span><span class="po-meta-value">Lead Mechanical Engineer</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">team</span><span class="po-meta-value">7 students</span></span>
+        </div>
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">timeline</span><span class="po-meta-value">Jan &ndash; Mar 2025</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">tools</span><span class="po-meta-value">SolidWorks, 3D Printing, Laser Cutting, Arduino</span></span>
+        </div>
+      </div>
+
+      <div class="po-divider po-divider-end"></div>
+      </div>
+
+    <section class="po-section" id="ar-design">
+      <p class="po-section-num">01 &middot; Design</p>
+      <h2 class="po-section-title">Designing for assembly</h2>
+      <div class="po-section-body">
+        <p>
+          I had no prior SolidWorks experience going into this project, so
+          designing the chassis and a functional claw mechanism meant
+          learning the software as I went. Partway through, I added a
+          second layer to the chassis to improve wire management and
+          weight distribution, which also let me repurpose the front and
+          back walls to mount the rover's three IR sensors, one in front
+          and two in back, angled vertically to the floor for better line
+          detection. Most of the claw components came off the 3D printer,
+          while the chassis itself was laser cut.
+        </p>
+      </div>
+      <figure class="po-figure po-media-contain" style="max-width: 468px;">
+        <div class="po-media" style="aspect-ratio: 709 / 449;"><img src="assets/autonomous-rover/cad-model.jpg" alt="CAD model of chassis + integrated claw"></div>
+        <figcaption class="po-figcaption">CAD model of chassis + integrated claw</figcaption>
+      </figure>
+    </section>
+
+    <section class="po-section" id="ar-troubleshooting">
+      <p class="po-section-num">02 &middot; Troubleshooting</p>
+      <h2 class="po-section-title">Keeping the rover on track</h2>
+      <div class="po-section-body">
+        <p>
+          We overlooked how weight distribution would affect ground
+          contact between the front caster and rear wheels, which made the
+          rover turn better right than left despite a centered battery.
+          That imbalance also tilted the chassis just enough to change the
+          angle between the IR sensors and the floor, throwing off how they
+          read the track and sending the rover off course entirely. The
+          fix was almost comically simple: taping a wrench to the back
+          balanced the rover enough for every wheel to make even contact,
+          and it completed the track from there. Looking back, leaving more
+          room in the CAD for adjustments, especially around the wiring and
+          IR sensors, would have made tweaks like this much easier to make
+          mid-build instead of after the fact.
+        </p>
+      </div>
+      <figure class="po-figure" style="max-width: 515px;">
+        <video muted playsinline controls preload="metadata" style="width: 515px; height: auto; display: block;" src="assets/autonomous-rover/troubleshooting.mp4"></video>
+        <figcaption class="po-figcaption">Rover going off course with uneven weight</figcaption>
+      </figure>
+    </section>
+
+    <section class="po-section" id="ar-reflection">
+      <p class="po-section-num">03 &middot; Reflection</p>
+      <h2 class="po-section-title">Learning by doing</h2>
+      <div class="po-section-body">
+        <p>
+          Volunteering to lead the CAD design and manufacturing pushed me
+          out of my comfort zone, since I hadn't touched SolidWorks before
+          this project. Outside of my main role, I also helped my teammates
+          debug the Arduino code, which gave me some early exposure to C++
+          and basic wiring. Between the design work and the troubleshooting
+          along the way, this project was my first real introduction to
+          design for manufacturing and assembly, principles I'd lean on
+          again in every project after it.
+        </p>
+      </div>
+      <figure class="po-figure" style="max-width: 515px;">
+        <video muted playsinline controls preload="metadata" style="width: 515px; height: auto; display: block;" src="assets/autonomous-rover/reflection.mp4"></video>
+        <figcaption class="po-figcaption">The rover completing the track</figcaption>
+      </figure>
+    </section>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 Ethan Tran</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin</a>
+        <span class="footer-dropdown">
+          <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">resume</a>
+          <span class="footer-dropdown-menu">
+            <span class="footer-dropdown-menu-inner">
+              <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering</a>
+              <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product</a>
+            </span>
+          </span>
+        </span>
+        <a href="mailto:ethandtran06@gmail.com">email</a>
+      </div>
+      <span class="footer-meta"><span>Los Angeles/Orange County</span> &middot; <span class="js-clock">--:--:--</span></span>
+    </div>
+  </footer>
+</div>
+
+<div class="project-overlay" id="projectOverlayRcDrone" data-project-panel="rc-drone" role="dialog" aria-modal="true" aria-label="RC Drone project detail">
+  <div class="project-overlay-inner">
+    <nav class="po-rail" aria-label="Section progress">
+      <a class="po-rail-item" href="#rd-context" data-po-target="rd-context">Context</a>
+      <a class="po-rail-item" href="#rd-design" data-po-target="rd-design">Design</a>
+      <a class="po-rail-item" href="#rd-testing" data-po-target="rd-testing">Testing</a>
+      <a class="po-rail-item" href="#rd-reflection" data-po-target="rd-reflection">Reflection</a>
+    </nav>
+
+    <div class="po-main">
+      <div id="rd-context">
+      <h1 class="po-title-row">
+        <span class="po-title-main">RC Drone</span>
+      </h1>
+
+      <div class="po-divider"></div>
+
+      <div class="po-hero" data-hero-for="rc-drone"></div>
+
+      <p class="po-intro">
+        Through the Peterworks program with ASME at UCI, I worked
+        with a team of four students to build a drone capable of controlled flight
+        inside a cage. The requirements were narrow: the electronics had to
+        be fully enclosed, and the drone needed landing legs and blade
+        guards to protect the propellers on touchdown. Past that, the
+        design was wide open, so my group modeled ours after the battle
+        bus from Fortnite.
+      </p>
+
+      <div class="po-divider"></div>
+
+      <div class="po-meta">
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">role</span><span class="po-meta-value">Lead Design Engineer</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">team</span><span class="po-meta-value">4 students</span></span>
+        </div>
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">timeline</span><span class="po-meta-value">Jan &ndash; Jun 2025</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">tools</span><span class="po-meta-value">SolidWorks, 3D Printing, Laser Cutting</span></span>
+        </div>
+      </div>
+
+      <div class="po-divider po-divider-end"></div>
+      </div>
+
+    <section class="po-section" id="rd-design">
+      <p class="po-section-num">01 &middot; Design</p>
+      <h2 class="po-section-title">Modeling a battle bus that flies</h2>
+      <div class="po-section-body">
+        <p>
+          After taking measurements of the electronics we'd be building
+          around, we split up the design work, and I took the chassis:
+          seven components in total, including the side panels with
+          windows, the front and back ends, the top and bottom, and the
+          front windshield. I built in bolt-and-nut mounting holes
+          throughout, and the chassis and landing legs came off the 3D
+          printer while the arms were laser cut. Hole shrinkage during
+          printing and a few laser cutter failures meant hand-drilling some
+          holes after the fact, and we ended up switching the landing legs
+          from PLA to TPU partway through for durability.
+        </p>
+      </div>
+      <figure class="po-figure po-media-contain" style="max-width: 468px;">
+        <div class="po-media" style="aspect-ratio: 730 / 504;"><img src="assets/rc-drone/cad-model.jpg" alt="CAD model of our Fortnite drone."></div>
+        <figcaption class="po-figcaption">CAD model of our Fortnite drone.</figcaption>
+      </figure>
+    </section>
+
+    <section class="po-section" id="rd-testing">
+      <p class="po-section-num">02 &middot; Testing</p>
+      <h2 class="po-section-title">When a small drone gets crowded</h2>
+      <div class="po-section-body">
+        <p>
+          A lot of flaws only became obvious once we hit assembly and
+          testing. We'd designed the drone too small for the electronics it
+          needed to hold, which meant cutting into the window panels just
+          to fit the ESCs and cramming the rest of the wiring in wherever
+          it would go. The tight hole placement that looked fine in CAD
+          made assembly genuinely difficult in a space that small.
+        </p>
+      </div>
+      <figure class="po-figure" style="max-width: 234px;">
+        <video muted playsinline controls preload="metadata" style="width: 234px; height: auto; display: block;" src="assets/rc-drone/calibrating-motors.mp4"></video>
+        <figcaption class="po-figcaption">Calibrating the motors</figcaption>
+      </figure>
+    </section>
+
+    <section class="po-section" id="rd-reflection">
+      <p class="po-section-num">03 &middot; Reflection</p>
+      <h2 class="po-section-title">One of fifteen, barely</h2>
+      <div class="po-section-body">
+        <p>
+          While the project wasn't entirely a success, I still gained
+          valuable experience and some key takeaways. Out of 15 groups in
+          the program, only 1 drone took flight successfully, so we
+          believe that this might be partly due to weak motors that have
+          been reused throughout multiple years. Still, there are other
+          variables we could've controlled, applying DFMA principles for
+          our drone chassis to make repair of the drone smoother. Planning
+          for the future during the engineering design process was
+          emphasized during this project.
+        </p>
+      </div>
+      <figure class="po-figure" style="max-width: 515px;">
+        <video muted playsinline controls preload="metadata" style="width: 515px; height: auto; display: block;" src="assets/rc-drone/testing-flight.mp4"></video>
+        <figcaption class="po-figcaption">Testing flight</figcaption>
+      </figure>
+    </section>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 Ethan Tran</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin</a>
+        <span class="footer-dropdown">
+          <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">resume</a>
+          <span class="footer-dropdown-menu">
+            <span class="footer-dropdown-menu-inner">
+              <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering</a>
+              <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product</a>
+            </span>
+          </span>
+        </span>
+        <a href="mailto:ethandtran06@gmail.com">email</a>
+      </div>
+      <span class="footer-meta"><span>Los Angeles/Orange County</span> &middot; <span class="js-clock">--:--:--</span></span>
+    </div>
+  </footer>
+</div>
+
+<div class="project-overlay" id="projectOverlayRcRover" data-project-panel="rc-rover" role="dialog" aria-modal="true" aria-label="RC Rover project detail">
+  <div class="project-overlay-inner">
+    <nav class="po-rail" aria-label="Section progress">
+      <a class="po-rail-item" href="#rr-context" data-po-target="rr-context">Context</a>
+      <a class="po-rail-item" href="#rr-process" data-po-target="rr-process">Process</a>
+      <a class="po-rail-item" href="#rr-testing" data-po-target="rr-testing">Testing</a>
+      <a class="po-rail-item" href="#rr-reflection" data-po-target="rr-reflection">Reflection</a>
+    </nav>
+
+    <div class="po-main">
+      <div id="rr-context">
+      <h1 class="po-title-row">
+        <span class="po-title-main">RC Rover</span>
+      </h1>
+
+      <div class="po-divider"></div>
+
+      <div class="po-hero"><img src="assets/rc-rover/assembly-drawing.jpg" alt="PIXAE Rover assembly drawing"></div>
+
+      <p class="po-intro">
+        ENGR 7A at UCI was my first real exposure to engineering as a
+        discipline. Alongside a team of seven students, we designed and
+        manufactured a remote-controlled rover to navigate an obstacle
+        course, inside a $300 budget and a 10" x 16" size constraint, with
+        a removable battery and an accessible on/off switch. My role
+        centered on component research and fabrication.
+      </p>
+
+      <div class="po-divider"></div>
+
+      <div class="po-meta">
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">role</span><span class="po-meta-value">R&amp;D Engineer</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">team</span><span class="po-meta-value">6 students</span></span>
+        </div>
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">timeline</span><span class="po-meta-value">Sept &ndash; Dec 2024</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">tools</span><span class="po-meta-value">SolidWorks, Soldering, Band Saw, Drill Press</span></span>
+        </div>
+      </div>
+
+      <div class="po-divider po-divider-end"></div>
+      </div>
+
+    <section class="po-section" id="rr-process">
+      <p class="po-section-num">01 &middot; Process</p>
+      <h2 class="po-section-title">Picking parts before touching tools</h2>
+      <div class="po-section-body">
+        <p>
+          Most of my time went into researching and sourcing components
+          before we ever touched fabrication. We settled on an Italian
+          poplar plywood chassis for its balance of weight and durability,
+          85 mm wheels, the largest available option for handling the
+          obstacle course terrain, and a 52-tooth hub-mount gear to balance
+          torque against speed. I cut and drilled the chassis on the band
+          saw and drill press while our electronics teammates handled the
+          soldering.
+        </p>
+      </div>
+      <figure class="po-figure po-media-contain" style="max-width: 468px;"><div class="po-media" style="aspect-ratio: 468 / 275;"><img src="assets/rc-rover/fabricating-chassis.jpg" alt="Fabricating the chassis"></div><figcaption class="po-figcaption">Fabricating the chassis</figcaption></figure>
+    </section>
+
+    <section class="po-section" id="rr-testing">
+      <p class="po-section-num">02 &middot; Testing</p>
+      <h2 class="po-section-title">What held up, and what didn't</h2>
+      <div class="po-section-body">
+        <p>
+          We tested in stages: individual components first, then
+          sub-assemblies, then the full rover. The parallel steering
+          mechanism we landed on achieved a 57-degree steering angle, which
+          held up through most of testing. Where it didn't hold up was the
+          official run itself, where the chassis took damage falling off a
+          ramp, the rover's length caused it to jam on an incline, and the
+          3D-printed steering mechanism needed reprinting more than once
+          due to shrinkage. We also ran into motor mounting misalignment
+          that only showed up once everything was assembled together.
+        </p>
+      </div>
+      <figure class="po-figure po-media-contain" style="max-width: 468px;"><div class="po-media" style="aspect-ratio: 468 / 404;"><img src="assets/rc-rover/steering-angle.jpg" alt="Measuring the steering angle"></div><figcaption class="po-figcaption">Measuring the steering angle</figcaption></figure>
+    </section>
+
+    <section class="po-section" id="rr-reflection">
+      <p class="po-section-num">03 &middot; Reflection</p>
+      <h2 class="po-section-title">What CAD doesn't show you</h2>
+      <div class="po-section-body">
+        <p>
+          As my first engineering project, this one taught me that a clean
+          CAD model doesn't always translate perfectly into a real part,
+          whether that's shrinkage in a 3D print or a misalignment that
+          only shows up once everything is bolted together. If I built
+          this again, I'd prototype earlier and weigh manufacturability
+          more heavily during the design phase, rather than treating it as
+          something to solve once the parts were already in hand.
+        </p>
+        <figure class="po-figure" style="max-width: 515px;"><video muted playsinline controls preload="metadata" style="width: 515px; height: auto; display: block;" src="assets/rc-rover/testing-track.mp4"></video><figcaption class="po-figcaption">Testing the rover on track</figcaption></figure>
+      </div>
+    </section>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 Ethan Tran</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin</a>
+        <span class="footer-dropdown">
+          <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">resume</a>
+          <span class="footer-dropdown-menu">
+            <span class="footer-dropdown-menu-inner">
+              <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering</a>
+              <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product</a>
+            </span>
+          </span>
+        </span>
+        <a href="mailto:ethandtran06@gmail.com">email</a>
+      </div>
+      <span class="footer-meta"><span>Los Angeles/Orange County</span> &middot; <span class="js-clock">--:--:--</span></span>
+    </div>
+  </footer>
+</div>
+
+<div class="project-overlay" id="projectOverlayCadProjects" data-project-panel="cad-projects" role="dialog" aria-modal="true" aria-label="CAD Projects project detail">
+  <div class="project-overlay-inner" style="grid-template-columns: 1fr;">
+    <div class="po-main" style="max-width: 780px; margin: 0 auto;">
+      <div id="cp-context">
+      <h1 class="po-title-row">
+        <span class="po-title-main">CAD Projects</span>
+      </h1>
+
+      <div class="po-divider"></div>
+
+      <p class="po-intro">
+        Outside of coursework and team builds, I use SolidWorks to model
+        things purely for practice, picking subjects that push me into
+        techniques I haven't used yet. Pick a project below to see more.
+      </p>
+
+      <div class="po-divider po-divider-end"></div>
+
+      <div class="reveal tile-grid" style="margin-top: 32px;">
+        <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="zekrom">
+          <span class="proj-tile-fallback">Zekrom</span>
+          <img class="proj-tile-img proj-tile-img-logo" src="assets/cad-projects/zekrom-thumbnail.png">
+          <div class="proj-tile-tags">
+            <span class="tag">Zekrom</span>
+            <span class="tag">Personal Project</span>
+          </div>
+        </div>
+        <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="ice-cream-cow-robot">
+          <span class="proj-tile-fallback">Ice Cream Cow Robot</span>
+          <img class="proj-tile-img proj-tile-img-logo" src="assets/cad-projects/zekrom-thumbnail.png">
+          <div class="proj-tile-tags">
+            <span class="tag">Ice Cream Cow Robot</span>
+            <span class="tag">Personal Project</span>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 Ethan Tran</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin</a>
+        <span class="footer-dropdown">
+          <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">resume</a>
+          <span class="footer-dropdown-menu">
+            <span class="footer-dropdown-menu-inner">
+              <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering</a>
+              <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product</a>
+            </span>
+          </span>
+        </span>
+        <a href="mailto:ethandtran06@gmail.com">email</a>
+      </div>
+      <span class="footer-meta"><span>Los Angeles/Orange County</span> &middot; <span class="js-clock">--:--:--</span></span>
+    </div>
+  </footer>
+</div>
+
+<div class="project-overlay" id="projectOverlayZekrom" data-project-panel="zekrom" role="dialog" aria-modal="true" aria-label="Zekrom project detail">
+  <div class="project-overlay-inner">
+    <nav class="po-rail" aria-label="Section progress">
+      <a class="po-rail-item" href="#zk-context" data-po-target="zk-context">Context</a>
+      <a class="po-rail-item" href="#zk-modeling" data-po-target="zk-modeling">Modeling</a>
+      <a class="po-rail-item" href="#zk-reflection" data-po-target="zk-reflection">Reflection</a>
+    </nav>
+
+    <div class="po-main">
+      <div id="zk-context">
+      <h1 class="po-title-row">
+        <span class="po-title-main">Zekrom</span>
+      </h1>
+
+      <div class="po-divider"></div>
+
+      <div class="po-hero" data-hero-for="zekrom"></div>
+
+      <p class="po-intro">
+        For MAE 52 at UC Irvine, I modeled Zekrom, a legendary Pokemon, in
+        SolidWorks. I already had some SolidWorks experience by this
+        point, so I used the project as a chance to push into features I
+        hadn't tried before: revolves, surfaces, and split lines.
+      </p>
+
+      <div class="po-divider"></div>
+
+      <div class="po-meta">
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">role</span><span class="po-meta-value">Personal Project</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">course</span><span class="po-meta-value">MAE 52</span></span>
+        </div>
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">time</span><span class="po-meta-value">~50 hours</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">tools</span><span class="po-meta-value">SolidWorks, SolidWorks Visualize, Finite Element Analysis</span></span>
+        </div>
+      </div>
+
+      <div class="po-divider po-divider-end"></div>
+      </div>
+
+    <section class="po-section" id="zk-modeling">
+      <p class="po-section-num">01 &middot; Modeling</p>
+      <h2 class="po-section-title">Sixteen parts, one legendary tail</h2>
+      <div class="po-section-body">
+        <p>
+          Beyond the surfacing work, I wanted Zekrom's joints to move
+          properly, so I built assembly mates that let the tail and head
+          spin, the wings flap, and the legs, arms, and fingers articulate.
+          Once the assembly, sixteen parts in total, was finished, I used
+          SolidWorks Visualize to render it, and ran a finite element
+          analysis on the tail to see how it would hold up under a
+          hypothetical battle.
+        </p>
+      </div>
+      <figure class="po-figure po-media-contain" style="max-width: 620px;">
+        <div class="po-media" style="aspect-ratio: 879 / 721;"><img src="assets/cad-projects/zekrom-isometric.jpg" alt="Zekrom rendered in SolidWorks Visualize, isometric view"></div>
+        <figcaption class="po-figcaption">Zekrom, rendered in SolidWorks Visualize</figcaption>
+      </figure>
+      <div class="po-media-row">
+        <figure class="po-figure po-media-contain">
+          <div class="po-media" style="aspect-ratio: 1000 / 580;"><img src="assets/cad-projects/zekrom-stress-sim.jpg" alt="Stress simulation on Zekrom's tail"></div>
+          <figcaption class="po-figcaption">Stress simulation</figcaption>
+        </figure>
+        <figure class="po-figure po-media-contain">
+          <div class="po-media" style="aspect-ratio: 1000 / 597;"><img src="assets/cad-projects/zekrom-displacement-sim.jpg" alt="Displacement simulation on Zekrom's tail"></div>
+          <figcaption class="po-figcaption">Displacement simulation</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="po-section" id="zk-reflection">
+      <p class="po-section-num">02 &middot; Reflection</p>
+      <h2 class="po-section-title">Fifty hours with a Pokemon</h2>
+      <div class="po-section-body">
+        <p>
+          Modeling a character instead of a functional part forced me to
+          think about surfacing and joint articulation in a way my other
+          coursework hadn't. It's a small, self-contained project compared
+          to the team builds, but it's the one where I most deliberately
+          picked up new SolidWorks skills on purpose rather than out of
+          necessity.
+        </p>
+      </div>
+    </section>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 Ethan Tran</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin</a>
+        <span class="footer-dropdown">
+          <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">resume</a>
+          <span class="footer-dropdown-menu">
+            <span class="footer-dropdown-menu-inner">
+              <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering</a>
+              <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product</a>
+            </span>
+          </span>
+        </span>
+        <a href="mailto:ethandtran06@gmail.com">email</a>
+      </div>
+      <span class="footer-meta"><span>Los Angeles/Orange County</span> &middot; <span class="js-clock">--:--:--</span></span>
+    </div>
+  </footer>
+</div>
+
+<div class="project-overlay" id="projectOverlayIceCreamCowRobot" data-project-panel="ice-cream-cow-robot" role="dialog" aria-modal="true" aria-label="Ice Cream Cow Robot project detail">
+  <div class="project-overlay-inner">
+    <nav class="po-rail" aria-label="Section progress">
+      <a class="po-rail-item" href="#icr-context" data-po-target="icr-context">Context</a>
+      <a class="po-rail-item" href="#icr-modeling" data-po-target="icr-modeling">Modeling</a>
+      <a class="po-rail-item" href="#icr-reflection" data-po-target="icr-reflection">Reflection</a>
+    </nav>
+
+    <div class="po-main">
+      <div id="icr-context">
+      <h1 class="po-title-row">
+        <span class="po-title-main">Ice Cream Cow Robot</span>
+      </h1>
+
+      <div class="po-divider"></div>
+
+      <div class="po-hero" data-hero-for="ice-cream-cow-robot"></div>
+
+      <p class="po-intro">
+        I came across a video of an ice cream cow robot online and thought
+        it'd be a good challenge to reverse-engineer in SolidWorks, with
+        nothing to go on but what I could see on screen.
+      </p>
+
+      <div class="po-divider"></div>
+
+      <div class="po-meta">
+        <div class="po-meta-row">
+          <span class="po-meta-pair"><span class="po-meta-label">role</span><span class="po-meta-value">Personal Project</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">tools</span><span class="po-meta-value">SolidWorks</span></span>
+        </div>
+      </div>
+
+      <div class="po-divider po-divider-end"></div>
+      </div>
+
+    <section class="po-section" id="icr-modeling">
+      <p class="po-section-num">01 &middot; Modeling</p>
+      <h2 class="po-section-title">Reverse-engineering from a video</h2>
+      <div class="po-section-body">
+        <p>
+          With no reference drawings or measurements to work from, I
+          modeled the robot's seven parts by eye, then built angle mates
+          to control how each one moved. Getting the linkages right meant
+          calculating measurements by hand until the assembly moved with
+          five degrees of freedom, close to how the original appeared to
+          move on screen.
+        </p>
+      </div>
+      <figure class="po-figure">
+        <div class="po-media"><span class="po-media-ph">+ isometric view of the assembly</span></div>
+        <figcaption class="po-figcaption">The completed assembly, modeled from video alone</figcaption>
+      </figure>
+      <figure class="po-figure">
+        <div class="po-media"><span class="po-media-ph">+ exploded view of the 7 parts</span></div>
+        <figcaption class="po-figcaption">Exploded view of the seven components</figcaption>
+      </figure>
+    </section>
+
+    <section class="po-section" id="icr-reflection">
+      <p class="po-section-num">02 &middot; Reflection</p>
+      <h2 class="po-section-title">Five degrees of freedom, zero instructions</h2>
+      <div class="po-section-body">
+        <p>
+          This one wasn't assigned by anyone, which is exactly why I
+          wanted to do it. Reverse-engineering a random object off the
+          internet, with no CAD files or dimensions to start from, honed a
+          skill that's come in handy since: looking at something that
+          already exists and figuring out how it was actually built.
+        </p>
+      </div>
+    </section>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <span>&copy; 2026 Ethan Tran</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin</a>
+        <span class="footer-dropdown">
+          <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">resume</a>
+          <span class="footer-dropdown-menu">
+            <span class="footer-dropdown-menu-inner">
+              <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering</a>
+              <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product</a>
+            </span>
+          </span>
+        </span>
+        <a href="mailto:ethandtran06@gmail.com">email</a>
+      </div>
+      <span class="footer-meta"><span>Los Angeles/Orange County</span> &middot; <span class="js-clock">--:--:--</span></span>
+    </div>
+  </footer>
+</div>
+
+<div class="po-bottombar" id="poBottomBar">
+  <div class="po-scroll-progress"><div class="po-scroll-progress-fill" id="poScrollFill"></div></div>
+  <div class="po-bottombar-inner">
+    <button type="button" class="po-back" id="poBack">&lsaquo; back</button>
+  </div>
+</div>
+
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="cursor-bubble" id="cursorBubble" aria-hidden="true"></div>
+
+<script>
+  (function () {
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Hero title typing effect
+    var heroTyped = document.querySelector('.hero-title-typed');
+    if (heroTyped) {
+      var fullTitle = "Hi! I'm Ethan Tran.";
+      if (prefersReduced) {
+        heroTyped.textContent = fullTitle;
+      } else {
+        var cursor = document.createElement('span');
+        cursor.className = 'typing-cursor';
+        heroTyped.after(cursor);
+
+        (function typeHeroTitle() {
+          var i = 0;
+          var speed = 62;
+          (function step() {
+            heroTyped.textContent = fullTitle.slice(0, i);
+            i++;
+            if (i <= fullTitle.length) {
+              setTimeout(step, speed);
+            }
+          })();
+        })();
+      }
+    }
+
+    // Scroll reveal, extended to every project-page block (story text,
+    // figures, stat rows) so the whole site gains the same fade-up-on-scroll
+    // treatment, not just the main page's grids.
+    var autoRevealSelectors = [
+      '.po-section-title', '.po-subsection-title', '.po-section-body',
+      '.po-intro', '.po-conclusion', '.po-callback', '.po-meta',
+      '.po-hero', '.po-figure', '.po-stat'
+    ];
+    document.querySelectorAll(autoRevealSelectors.join(',')).forEach(function (el) {
+      el.classList.add('reveal');
+    });
+
+    // Count-up numbers: pull the leading number out of each .po-stat-num
+    // (keeping a leading "$" and any trailing unit/text, like the "th" in
+    // "10th of 29", untouched) so it can be animated from 0 up to its real
+    // value once the stat scrolls into view.
+    var counters = [];
+    document.querySelectorAll('.po-stat-num').forEach(function (el) {
+      var node = el.firstChild;
+      if (!node || node.nodeType !== 3) return;
+      var m = node.textContent.match(/^(\$?)(\d[\d,]*)([\s\S]*)$/);
+      if (!m) return;
+      var target = parseInt(m[2].replace(/,/g, ''), 10);
+      if (!isFinite(target)) return;
+      counters.push({ node: node, prefix: m[1], target: target, suffix: m[3] });
+      node.textContent = m[1] + '0' + m[3];
+    });
+
+    function runCounter(c) {
+      var duration = 1300;
+      var start = null;
+      function frame(ts) {
+        if (start === null) start = ts;
+        var t = Math.min(1, (ts - start) / duration);
+        var eased = 1 - Math.pow(1 - t, 3);
+        var val = Math.round(c.target * eased);
+        c.node.textContent = c.prefix + val.toLocaleString('en-US') + c.suffix;
+        if (t < 1) window.requestAnimationFrame(frame);
+      }
+      window.requestAnimationFrame(frame);
+    }
+
+    if ('IntersectionObserver' in window && !prefersReduced) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+            counters.forEach(function (c) {
+              if (entry.target.contains(c.node)) runCounter(c);
+            });
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+      counters.forEach(function (c) {
+        c.node.textContent = c.prefix + c.target.toLocaleString('en-US') + c.suffix;
+      });
+    }
+
+    // Nav scrolled state
+    var nav = document.getElementById('siteNav');
+    window.addEventListener('scroll', function () {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // Resume dropdowns (nav + footer): blur the link after a click so the
+    // menu doesn't stay stuck open once the mouse leaves (a clicked link
+    // keeps focus, and the dropdown is shown via :focus-within for keyboard users)
+    document.querySelectorAll('.nav-dropdown a, .nav-dropdown button, .footer-dropdown a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        a.blur();
+      });
+    });
+
+    // Experience accordion
+    document.querySelectorAll('.tl-trigger').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btn.closest('.tl-row').classList.toggle('open');
+      });
+    });
+
+    // Work/project tiles: tap or keyboard to reveal on touch devices
+    var hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    document.querySelectorAll('.proj-tile').forEach(function (tile) {
+      if (tile.hasAttribute('data-project')) return;
+      if (!hasFinePointer) {
+        tile.addEventListener('click', function () {
+          tile.classList.toggle('is-active');
+        });
+      }
+      tile.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          tile.classList.toggle('is-active');
+        }
+      });
+    });
+
+    // Custom cursor dot (replaces the system pointer everywhere)
+    var cursorDot = document.getElementById('cursorDot');
+    if (cursorDot && hasFinePointer) {
+      document.addEventListener('mousemove', function (e) {
+        cursorDot.style.left = e.clientX + 'px';
+        cursorDot.style.top = e.clientY + 'px';
+        if (!e.target.closest('.proj-tile')) {
+          cursorDot.classList.add('is-visible');
+        }
+      });
+      document.addEventListener('mouseleave', function () {
+        cursorDot.classList.remove('is-visible');
+      });
+
+      // Click: the dot ducks out and a ring ripples outward from the click point
+      document.addEventListener('mousedown', function (e) {
+        var ripple = document.createElement('div');
+        ripple.className = 'cursor-ripple';
+        ripple.style.left = e.clientX + 'px';
+        ripple.style.top = e.clientY + 'px';
+        document.body.appendChild(ripple);
+        ripple.addEventListener('animationend', function () {
+          ripple.remove();
+        });
+
+        cursorDot.classList.add('is-clicking');
+        setTimeout(function () {
+          cursorDot.classList.remove('is-clicking');
+        }, 200);
+      });
+    }
+
+    // Cursor-follow bubble on work/project tiles ("see work" / "see project")
+    var cursorBubble = document.getElementById('cursorBubble');
+    if (cursorBubble && hasFinePointer) {
+      document.querySelectorAll('.proj-tile').forEach(function (tile) {
+        var label = tile.getAttribute('data-cursor-label') || '';
+        tile.addEventListener('mouseenter', function () {
+          cursorBubble.textContent = label;
+          cursorBubble.classList.add('is-visible');
+          if (cursorDot) cursorDot.classList.remove('is-visible');
+        });
+        tile.addEventListener('mousemove', function (e) {
+          cursorBubble.style.left = e.clientX + 'px';
+          cursorBubble.style.top = e.clientY + 'px';
+        });
+        tile.addEventListener('mouseleave', function () {
+          cursorBubble.classList.remove('is-visible');
+          if (cursorDot) cursorDot.classList.add('is-visible');
+        });
+      });
+    }
+
+
+    // Project detail overlays. Each .project-overlay is one project page,
+    // matched to a tile by data-project / data-project-panel. The bottom bar
+    // and its scroll-progress line are shared, since only one can be open.
+    (function () {
+      var panels = document.querySelectorAll('.project-overlay[data-project-panel]');
+      if (!panels.length) return;
+
+      var backBtn = document.getElementById('poBack');
+      var bottomBar = document.getElementById('poBottomBar');
+      var scrollFill = document.getElementById('poScrollFill');
+      var active = null;
+      var lastTrigger = null;
+      var byName = {};
+
+      function updateScrollProgress() {
+        if (!scrollFill || !active) return;
+        var max = active.scrollHeight - active.clientHeight;
+        var pct = max > 0 ? Math.min(100, (active.scrollTop / max) * 100) : 0;
+        scrollFill.style.width = pct + '%';
+      }
+
+      function setup(overlay) {
+        var railItems = overlay.querySelectorAll('.po-rail-item');
+        var sections = overlay.querySelectorAll('.po-main > div[id], .po-section');
+
+        // Reuse the tile's cover image as the hero rather than embedding a
+        // second copy of the same base64 data.
+        var hero = overlay.querySelector('.po-hero[data-hero-for]');
+        if (hero && !hero.querySelector('img')) {
+          var name = hero.getAttribute('data-hero-for');
+          var tileImg = document.querySelector('.proj-tile[data-project="' + name + '"] .proj-tile-img');
+          if (tileImg && tileImg.getAttribute('src')) {
+            var img = document.createElement('img');
+            img.src = tileImg.getAttribute('src');
+            img.alt = '';
+            hero.appendChild(img);
+          }
+        }
+
+        // Scroll-spy: exactly one rail item is active, the last section whose
+        // top has crossed the threshold line (or the final one at the bottom).
+        function updateActiveSection() {
+          if (!railItems.length || !sections.length) return;
+          var line = overlay.clientHeight * 0.35;
+          var overlayTop = overlay.getBoundingClientRect().top;
+          var current = sections[0];
+          sections.forEach(function (s) {
+            if (s.getBoundingClientRect().top - overlayTop <= line) current = s;
+          });
+          if (overlay.scrollTop + overlay.clientHeight >= overlay.scrollHeight - 4) {
+            current = sections[sections.length - 1];
+          }
+          railItems.forEach(function (ri) {
+            ri.classList.toggle('is-active', ri.getAttribute('data-po-target') === current.id);
+          });
+        }
+
+        var ticking = false;
+        overlay.addEventListener('scroll', function () {
+          updateScrollProgress();
+          if (ticking) return;
+          ticking = true;
+          window.requestAnimationFrame(function () {
+            updateActiveSection();
+            ticking = false;
+          });
+        }, { passive: true });
+        window.addEventListener('resize', updateActiveSection);
+
+        railItems.forEach(function (item, i) {
+          item.addEventListener('click', function (e) {
+            e.preventDefault();
+            // The first item is the top block, so go all the way up rather
+            // than skipping the container's top padding.
+            if (i === 0) {
+              overlay.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+              return;
+            }
+            var target = overlay.querySelector('#' + item.getAttribute('data-po-target'));
+            if (target) {
+              target.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+            }
+          });
+        });
+
+        // Results layout: where a page pairs a landscape and portrait video,
+        // the portrait runs from the top of the copy to the landscape's bottom.
+        // The left column is text plus a width-scaled video, so no fixed ratio
+        // tracks it at every width. Measure it instead.
+        var grid = overlay.querySelector('.po-results-grid');
+        if (grid) {
+          var main = grid.querySelector('.po-results-main');
+          var landscape = grid.querySelector('.po-video-landscape video');
+          var portrait = grid.querySelector('.po-video-portrait video');
+          if (main && landscape && portrait) {
+            var syncPortraitHeight = function () {
+              if (window.matchMedia('(max-width: 1180px)').matches) {
+                portrait.style.height = '';
+                return;
+              }
+              var h = Math.round(landscape.getBoundingClientRect().bottom - main.getBoundingClientRect().top);
+              if (h > 0) portrait.style.height = h + 'px';
+            };
+            syncPortraitHeight();
+            window.addEventListener('resize', syncPortraitHeight);
+            landscape.addEventListener('loadedmetadata', syncPortraitHeight);
+            if ('ResizeObserver' in window) new ResizeObserver(syncPortraitHeight).observe(main);
+            overlay.addEventListener('po:opened', syncPortraitHeight);
+          }
+        }
+
+        overlay.addEventListener('po:opened', updateActiveSection);
+
+        // Videos only start playing once scrolled fully into view within the
+        // overlay, and stop when they scroll out or the overlay itself is
+        // hidden (closed, or tucked behind a nested overlay on the back-stack).
+        var overlayVideos = Array.prototype.slice.call(overlay.querySelectorAll('video'));
+        var videoObserver = null;
+        if (overlayVideos.length && 'IntersectionObserver' in window) {
+          videoObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting && entry.intersectionRatio >= 0.98) {
+                entry.target.play().catch(function () {});
+              } else {
+                entry.target.pause();
+              }
+            });
+          }, { root: overlay, threshold: [0, 0.98, 1] });
+        }
+        overlay.addEventListener('po:opened', function () {
+          if (videoObserver) overlayVideos.forEach(function (v) { videoObserver.observe(v); });
+        });
+        overlay.addEventListener('po:closed', function () {
+          if (videoObserver) videoObserver.disconnect();
+          overlayVideos.forEach(function (v) { v.pause(); });
+        });
+
+        byName[overlay.getAttribute('data-project-panel')] = overlay;
+      }
+
+      panels.forEach(setup);
+
+      var overlayStack = [];
+
+      function openProjectOverlay(name, trigger) {
+        var overlay = byName[name];
+        if (!overlay) return;
+        if (active && active !== overlay) {
+          overlayStack.push(active);
+          active.classList.remove('is-open');
+          active.dispatchEvent(new Event('po:closed'));
+        } else if (!active) {
+          lastTrigger = trigger || null;
+        }
+        active = overlay;
+        overlay.scrollTop = 0;
+        overlay.classList.add('is-open');
+        if (bottomBar) bottomBar.classList.add('is-open');
+        document.documentElement.classList.add('overlay-locked');
+        overlay.setAttribute('tabindex', '-1');
+        overlay.focus({ preventScroll: true });
+        updateScrollProgress();
+        overlay.dispatchEvent(new Event('po:opened'));
+      }
+
+      function closeProjectOverlay() {
+        if (active) {
+          active.classList.remove('is-open');
+          active.dispatchEvent(new Event('po:closed'));
+        }
+        if (overlayStack.length) {
+          active = overlayStack.pop();
+          active.scrollTop = active.scrollTop;
+          active.classList.add('is-open');
+          if (bottomBar) bottomBar.classList.add('is-open');
+          active.setAttribute('tabindex', '-1');
+          active.focus({ preventScroll: true });
+          updateScrollProgress();
+          active.dispatchEvent(new Event('po:opened'));
+          return;
+        }
+        active = null;
+        if (bottomBar) bottomBar.classList.remove('is-open');
+        document.documentElement.classList.remove('overlay-locked');
+        if (lastTrigger && typeof lastTrigger.focus === 'function') {
+          lastTrigger.focus({ preventScroll: true });
+        }
+      }
+
+      document.querySelectorAll('.proj-tile[data-project]').forEach(function (tile) {
+        var name = tile.getAttribute('data-project');
+        tile.addEventListener('click', function () {
+          openProjectOverlay(name, tile);
+        });
+        tile.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openProjectOverlay(name, tile);
+          }
+        });
+      });
+
+      if (backBtn) backBtn.addEventListener('click', closeProjectOverlay);
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && active) closeProjectOverlay();
+      });
+    })();
+
+    // Record player: click to toggle background music
+    (function () {
+      var btn = document.getElementById('recordPlayer');
+      if (!btn) return;
+      var volumeSlider = document.getElementById('rpVolumeSlider');
+
+      var audio = null;
+      var isPlaying = false;
+
+      function ensureAudio() {
+        if (audio) return;
+        audio = new Audio('assets/home/background-music.mp3');
+        audio.loop = true;
+        audio.volume = volumeSlider ? parseFloat(volumeSlider.value) : 0.55;
+        audio.addEventListener('ended', function () {
+          isPlaying = false;
+          btn.classList.remove('is-playing');
+          btn.setAttribute('aria-pressed', 'false');
+          btn.setAttribute('aria-label', 'Play background music');
+        });
+      }
+
+      btn.addEventListener('click', function () {
+        ensureAudio();
+        isPlaying = !isPlaying;
+        btn.classList.toggle('is-playing', isPlaying);
+        btn.setAttribute('aria-pressed', String(isPlaying));
+        btn.setAttribute('aria-label', isPlaying ? 'Pause background music' : 'Play background music');
+        if (isPlaying) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
+      });
+
+      if (volumeSlider) {
+        volumeSlider.addEventListener('input', function () {
+          if (audio) audio.volume = parseFloat(volumeSlider.value);
+        });
+      }
+    })();
+
+    // Footer clock (Los Angeles/Orange County, Pacific time)
+    var clockEls = document.querySelectorAll('.js-clock');
+    function tick() {
+      try {
+        var now = new Date();
+        var parts = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/Los_Angeles',
+          hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+        }).format(now);
+        clockEls.forEach(function (el) { el.textContent = parts; });
+      } catch (e) { /* leave placeholder */ }
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
+
+</body>
+</html>
