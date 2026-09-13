@@ -8,7 +8,8 @@ A single-page portfolio site for Ethan Tran (UC Irvine, mechanical engineering).
 
 ## Structure
 
-- `index.html` — the entire site: markup, `<style>`, and `<script>` all inline in one file.
+- `index.html` — the entire main site: markup, `<style>`, and `<script>` all inline in one file.
+- `recruiter.html` — a separate, standalone page (added September 2026), not part of the `index.html` single-page app. A condensed view for recruiters: name/tagline, a live Pacific-time clock, an Experience section (Scientific Horizons + SharkNinja), and a Projects section (UCI Solar Car + UCI Keyak Lab; UCI HyperXite is deliberately excluded since it has no real project-overlay content, only a "coming soon" home tile — recheck the codebase before adding it if that changes). Its "See project →" links deep-link to `index.html#project-<name>`, reusing `index.html`'s existing hash-restore overlay-opening logic rather than duplicating project content. Shares `index.html`'s exact design system (same CSS custom properties, fonts, colors) but keeps its own copy of that CSS since there's no shared stylesheet file. Linked from `index.html`'s main nav ("recruiter mode").
 - `assets/<project>/` — photos and videos, one folder per project: `home/`, `solar-car/`, `sharkninja/`, `keyak-lab/`, `autonomous-rover/`, `rc-drone/`, `rc-rover/`, `cad-projects/`.
 - `README.md` — local preview and deployment instructions (Live Server, GitHub Pages, Netlify, Vercel).
 
