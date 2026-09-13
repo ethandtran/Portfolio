@@ -3873,9 +3873,12 @@
       // through this fixed order. Built from the matching tile's own
       // image/name rather than duplicating that data, same idea as the
       // .po-hero reuse above.
+      // cad-projects (the hub) is deliberately left out: it doesn't get its
+      // own "next project" card, and rc-rover's card points straight at
+      // Zekrom instead of the hub in between.
       var projectOrder = [
         'sharkninja', 'solar-car', 'keyak-lab', 'autonomous-rover',
-        'rc-drone', 'rc-rover', 'cad-projects', 'zekrom', 'ice-cream-cow-robot'
+        'rc-drone', 'rc-rover', 'zekrom', 'ice-cream-cow-robot'
       ];
       projectOrder.forEach(function (name, i) {
         var overlay = byName[name];
