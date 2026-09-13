@@ -138,6 +138,7 @@
     font-family: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 1.02rem;
     font-weight: 300;
+    color: var(--ink-soft);
   }
 
   .nav-links {
@@ -1807,7 +1808,8 @@
         </div>
         <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="cad-projects">
           <span class="proj-tile-fallback">CAD Projects</span>
-          <img class="proj-tile-img proj-tile-img-logo" src="assets/cad-projects/zekrom-thumbnail.png">
+          <img class="proj-tile-img" src="assets/cad-projects/zekrom-render.jpg" alt="" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
           <div class="proj-tile-tags">
             <span class="tag">CAD Projects</span>
             <span class="tag">Personal Project</span>
@@ -1939,7 +1941,7 @@
 
     <section class="po-section" id="po-build">
       <p class="po-section-num">01 &middot; Build</p>
-      <h2 class="po-section-title">Designing a welding jig for steering column integration</h2>
+      <h2 class="po-section-title">Attaching the steering column</h2>
       <div class="po-section-body">
         <p>
           The steering column had to be welded to the chassis in a fixed
@@ -2469,7 +2471,7 @@
 
     <section class="po-section" id="kl-process" style="max-width: 970px;">
       <p class="po-section-num">02 &middot; Process</p>
-      <h2 class="po-section-title">Redesigning for a round fit</h2>
+      <h2 class="po-section-title">Redesigning for a better fit</h2>
       <div class="po-section-body">
         <p>
           While assembling the chamber and shield pieces in SolidWorks, I
@@ -2767,7 +2769,7 @@
 
     <section class="po-section" id="rd-testing">
       <p class="po-section-num">02 &middot; Testing</p>
-      <h2 class="po-section-title">When a small drone gets crowded</h2>
+      <h2 class="po-section-title">No room left inside</h2>
       <div class="po-section-body">
         <p>
           A lot of flaws only became obvious once we hit assembly and
@@ -2786,7 +2788,7 @@
 
     <section class="po-section" id="rd-reflection">
       <p class="po-section-num">03 &middot; Reflection</p>
-      <h2 class="po-section-title">One of fifteen, barely</h2>
+      <h2 class="po-section-title">Lesson learned</h2>
       <div class="po-section-body">
         <p>
           While the project wasn't entirely a success, I still gained
@@ -2971,15 +2973,17 @@
       <div class="reveal tile-grid" style="margin-top: 32px;">
         <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="zekrom">
           <span class="proj-tile-fallback">Zekrom</span>
-          <img class="proj-tile-img proj-tile-img-logo" src="assets/cad-projects/zekrom-thumbnail.png">
+          <img class="proj-tile-img" src="assets/cad-projects/zekrom-render.jpg" alt="" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
           <div class="proj-tile-tags">
             <span class="tag">Zekrom</span>
-            <span class="tag">Personal Project</span>
+            <span class="tag">UCI MAE 52</span>
           </div>
         </div>
         <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="ice-cream-cow-robot">
           <span class="proj-tile-fallback">Ice Cream Cow Robot</span>
-          <img class="proj-tile-img proj-tile-img-logo" src="assets/cad-projects/zekrom-thumbnail.png">
+          <img class="proj-tile-img" src="assets/cad-projects/ice-cream-isometric.jpg" alt="" onload="this.previousElementSibling.style.display='none'">
+          <div class="proj-tile-scrim"></div>
           <div class="proj-tile-tags">
             <span class="tag">Ice Cream Cow Robot</span>
             <span class="tag">Personal Project</span>
@@ -3169,14 +3173,20 @@
           move on screen.
         </p>
       </div>
-      <figure class="po-figure">
-        <div class="po-media"><span class="po-media-ph">+ isometric view of the assembly</span></div>
+      <figure class="po-figure po-media-contain" style="max-width: 480px;">
+        <div class="po-media" style="aspect-ratio: 636 / 573;"><img src="assets/cad-projects/ice-cream-isometric.jpg" alt="The completed ice cream cow robot assembly, isometric view"></div>
         <figcaption class="po-figcaption">The completed assembly, modeled from video alone</figcaption>
       </figure>
-      <figure class="po-figure">
-        <div class="po-media"><span class="po-media-ph">+ exploded view of the 7 parts</span></div>
-        <figcaption class="po-figcaption">Exploded view of the seven components</figcaption>
-      </figure>
+      <div class="po-media-row">
+        <figure class="po-figure po-media-contain">
+          <div class="po-media" style="aspect-ratio: 662 / 625;"><img src="assets/cad-projects/ice-cream-exploded.jpg" alt="Exploded view of the ice cream cow robot's seven parts"></div>
+          <figcaption class="po-figcaption">Exploded view of the seven components</figcaption>
+        </figure>
+        <figure class="po-figure po-media-contain">
+          <div class="po-media" style="aspect-ratio: 562 / 557;"><img src="assets/cad-projects/ice-cream-front.jpg" alt="Front view of the ice cream cow robot"></div>
+          <figcaption class="po-figcaption">Front view</figcaption>
+        </figure>
+      </div>
     </section>
 
     <section class="po-section" id="icr-reflection">

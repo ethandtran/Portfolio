@@ -19,12 +19,11 @@ A single-page portfolio site for Ethan Tran (UC Irvine, mechanical engineering).
 - Videos are muted by default, no autoplay, `playsinline`, `preload="metadata"`, with manual play controls (the native controls bar includes the mute/unmute toggle). Every video's `.mp4` file in the SharkNinja, UCI Solar Car, RC Drone, and RC Rover sections carries a real AAC audio track (re-muxed in from the raw source in September 2026 — the original web-compressed exports had silently dropped audio), so unmuting them actually produces sound. Other projects' videos (Autonomous Rover, etc.) haven't been checked/fixed the same way — don't assume they have audio without checking the raw source first. When re-exporting/replacing any video asset in a project that's supposed to have audio, make sure to keep or re-mux in the audio track from the raw source — it's easy to silently drop during compression.
 - Typography: `"Figtree"` (Google Fonts, free) for general UI/body text, `"Exposure Trial VAR"` (serif display) specifically for section and subsection titles (`.po-section-title`, `.po-subsection-title`, `.serif` utility class). Keep this split when adding new headings. Fonts were matched to a reference portfolio (ruocanpeng.com) in September 2026, replacing the original `"Inter"`/`"Newsreader"` pairing.
 - **Font licensing caveat:** `"Exposure Trial VAR"` (self-hosted at `assets/home/ExposureTrialVAR.ttf`, loaded via `@font-face`) is a free *trial* build of a commercial variable typeface by type foundry 205TF (205.tf), designed by Federico Parra Barrios. 205TF's trial license is explicitly for private evaluation only, not production/commercial site use — the user was told this and chose to use the trial file on the live site anyway. If this ever needs to be legitimate, either buy a proper webfont license from 205.tf or swap in a free alternative.
-- Projects covered: SharkNinja (co-op), UCI Solar Car, UCI Keyak Lab, Autonomous Rover (ENGR 7B), RC Drone, RC Rover / PIXAE Rover (ENGR 7A), CAD Projects (includes the Zekrom render).
+- Projects covered: SharkNinja (co-op), UCI Solar Car, UCI Keyak Lab, Autonomous Rover (ENGR 7B), RC Drone, RC Rover / PIXAE Rover (ENGR 7A), CAD Projects (a hub overlay, `id="projectOverlayCadProjects"`, linking to two sub-project overlays: Zekrom, a MAE 52 coursework model, and the Ice Cream Cow Robot, a personal reverse-engineering project — both filled in with real media as of September 2026).
 
 ## Known incomplete spots
 
-- The "Ice Cream Cow Robot" project overlay (`id="projectOverlayIceCreamCowRobot"`) still has unfilled placeholder slots — no matching media was available as of the last migration pass. Fill in when photos/videos for it exist.
-- Inside the `zk-modeling` section, one placeholder pair ("isometric view of the assembly" / "exploded view of the 7 parts") for a different sub-project is also still unfilled.
+None currently open.
 
 ## Current deployment state
 
