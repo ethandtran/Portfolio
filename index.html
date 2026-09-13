@@ -1581,10 +1581,17 @@
 
   .po-next:hover .po-next-media img { transform: scale(1.035); }
 
-  .po-next-tag {
+  .po-next-tags {
     position: absolute;
     left: 14px;
+    right: 14px;
     bottom: 14px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .po-next-tags .tag {
     background: #f4f3ef;
     color: #1a1a18;
     font-family: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -1592,7 +1599,7 @@
     font-size: 0.85rem;
     letter-spacing: -0.005em;
     padding: 8px 15px;
-    border-radius: 999px;
+    border: none;
     white-space: nowrap;
     box-shadow: 0 6px 18px rgba(20, 18, 14, 0.14);
   }
@@ -3878,7 +3885,7 @@
         var main = overlay.querySelector('.po-main');
         if (!nextTile || !main) return;
         var nextImg = nextTile.querySelector('.proj-tile-img');
-        var nextLabel = nextTile.querySelector('.proj-tile-fallback');
+        var nextTagEls = nextTile.querySelectorAll('.proj-tile-tags .tag');
         if (!nextImg || !nextImg.getAttribute('src')) return;
 
         var link = document.createElement('a');
@@ -3896,12 +3903,12 @@
         img.src = nextImg.getAttribute('src');
         img.alt = '';
 
-        var tag = document.createElement('span');
-        tag.className = 'po-next-tag';
-        tag.textContent = nextLabel ? nextLabel.textContent : nextName;
+        var tags = document.createElement('div');
+        tags.className = 'po-next-tags';
+        nextTagEls.forEach(function (t) { tags.appendChild(t.cloneNode(true)); });
 
         media.appendChild(img);
-        media.appendChild(tag);
+        media.appendChild(tags);
         link.appendChild(label);
         link.appendChild(media);
         main.appendChild(link);
