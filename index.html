@@ -1435,6 +1435,73 @@
     .po-media-row-3 { grid-template-columns: 1fr; }
   }
 
+  .po-carousel-track {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 5px;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+  }
+
+  .po-carousel-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4%;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  .po-carousel-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    display: block;
+  }
+
+  .po-carousel-slide.is-active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .po-carousel-slide.is-prev { transform: translateX(-100%); }
+
+  .po-carousel-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 14px;
+  }
+
+  .po-carousel-dot {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--line);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .po-carousel-dot.is-active {
+    background: var(--ink-soft);
+    transform: scale(1.35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .po-carousel-slide { transition: none; }
+  }
+
   @media (max-width: 1060px) {
     #sn-fin-compare-row > figure { max-width: 100% !important; }
   }
@@ -1843,8 +1910,7 @@
         </div>
         <div class="proj-tile" tabindex="0" data-cursor-label="see project" data-project="cad-projects">
           <span class="proj-tile-fallback">CAD Projects</span>
-          <img class="proj-tile-img" src="assets/cad-projects/zekrom-render.jpg" alt="" onload="this.previousElementSibling.style.display='none'">
-          <div class="proj-tile-scrim"></div>
+          <img class="proj-tile-img proj-tile-img-logo" src="assets/cad-projects/solidworks-logo.jpg" alt="" onload="this.previousElementSibling.style.display='none'">
           <div class="proj-tile-tags">
             <span class="tag">CAD Projects</span>
             <span class="tag">Personal Project</span>
@@ -3105,11 +3171,26 @@
           hypothetical battle.
         </p>
       </div>
-      <figure class="po-figure po-media-contain" style="max-width: 620px;">
-        <div class="po-media" style="aspect-ratio: 879 / 721;"><img src="assets/cad-projects/zekrom-isometric.jpg" alt="Zekrom rendered in SolidWorks Visualize, isometric view"></div>
-        <figcaption class="po-figcaption">Zekrom, rendered in SolidWorks Visualize</figcaption>
+      <figure class="po-figure po-carousel" style="max-width: 620px;">
+        <div class="po-carousel-track" style="aspect-ratio: 879 / 721;">
+          <div class="po-carousel-slide is-active"><img src="assets/cad-projects/zekrom-isometric.jpg" alt="Zekrom rendered in SolidWorks Visualize, isometric view"></div>
+          <div class="po-carousel-slide"><img src="assets/cad-projects/zekrom-front.jpg" alt="Zekrom, front view"></div>
+          <div class="po-carousel-slide"><img src="assets/cad-projects/zekrom-side.jpg" alt="Zekrom, side view"></div>
+          <div class="po-carousel-slide"><img src="assets/cad-projects/zekrom-back.jpg" alt="Zekrom, back view"></div>
+        </div>
+        <div class="po-carousel-dots">
+          <button type="button" class="po-carousel-dot is-active" aria-label="Isometric view"></button>
+          <button type="button" class="po-carousel-dot" aria-label="Front view"></button>
+          <button type="button" class="po-carousel-dot" aria-label="Side view"></button>
+          <button type="button" class="po-carousel-dot" aria-label="Back view"></button>
+        </div>
+        <figcaption class="po-figcaption" data-carousel-caption>Zekrom, rendered in SolidWorks Visualize (isometric view)</figcaption>
       </figure>
-      <div class="po-media-row">
+      <div class="po-media-row po-media-row-3">
+        <figure class="po-figure po-media-contain">
+          <div class="po-media" style="aspect-ratio: 1070 / 742;"><img src="assets/cad-projects/zekrom-exploded.jpg" alt="Zekrom, exploded view of the sixteen-part assembly"></div>
+          <figcaption class="po-figcaption">Exploded view</figcaption>
+        </figure>
         <figure class="po-figure po-media-contain">
           <div class="po-media" style="aspect-ratio: 1000 / 580;"><img src="assets/cad-projects/zekrom-stress-sim.jpg" alt="Stress simulation on Zekrom's tail"></div>
           <figcaption class="po-figcaption">Stress simulation</figcaption>
@@ -3384,6 +3465,62 @@
       a.addEventListener('click', function () {
         a.blur();
       });
+    });
+
+    // Auto-rotating image carousel (currently just Zekrom's view gallery).
+    // New slides enter from the right and the outgoing slide exits left.
+    document.querySelectorAll('.po-carousel').forEach(function (carousel) {
+      var slides = Array.prototype.slice.call(carousel.querySelectorAll('.po-carousel-slide'));
+      var dots = Array.prototype.slice.call(carousel.querySelectorAll('.po-carousel-dot'));
+      var caption = carousel.querySelector('[data-carousel-caption]');
+      var captions = slides.map(function (s) { return s.querySelector('img').alt; });
+      var index = 0;
+      var timer = null;
+
+      function show(next) {
+        if (next === index) return;
+        slides[index].classList.remove('is-active');
+        slides[index].classList.add('is-prev');
+        slides[next].classList.remove('is-prev');
+        slides[next].classList.add('is-active');
+        dots[index].classList.remove('is-active');
+        dots[next].classList.add('is-active');
+        if (caption) caption.textContent = captions[next];
+        index = next;
+      }
+
+      function advance() { show((index + 1) % slides.length); }
+
+      function start() {
+        if (timer || prefersReduced || slides.length < 2) return;
+        timer = setInterval(advance, 4000);
+      }
+
+      function stop() {
+        clearInterval(timer);
+        timer = null;
+      }
+
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () {
+          show(i);
+          stop();
+          start();
+        });
+      });
+
+      carousel.addEventListener('mouseenter', stop);
+      carousel.addEventListener('mouseleave', start);
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) start(); else stop();
+          });
+        }, { threshold: 0.2 }).observe(carousel);
+      } else {
+        start();
+      }
     });
 
     // Experience accordion
