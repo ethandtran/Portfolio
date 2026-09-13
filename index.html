@@ -1565,14 +1565,27 @@
   }
 
   /* bottom of the SharkNinja page tracks the width of the copy above it */
-  #sn-outcome .po-stats,
-  #sn-outcome .po-closing-image { max-width: 68ch; }
+  #sn-outcome .po-stats { max-width: 68ch; }
 
   .po-closing-image img {
     display: block;
     width: 100%;
     height: auto;
     border-radius: 5px;
+  }
+
+  .sn-outcome-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .sn-outcome-grid .po-closing-image { margin: 0; }
+
+  @media (max-width: 900px) {
+    .sn-outcome-grid { grid-template-columns: 1fr; }
+    .sn-outcome-grid .po-closing-image { margin-top: 40px; max-width: 340px; }
   }
 
   .po-video-landscape video {
@@ -2315,37 +2328,41 @@
       <p class="po-section-num">06 &middot; Reflection</p>
       <h2 class="po-section-title">What shipped</h2>
 
-      <p class="po-conclusion">
-        During my co-op, most of my work lived in the gap between what a
-        product does on a spec sheet and how it performs in someone's home.
-        Instead of treating a passing test as a finished feature, I prioritized
-        what the customer would actually experience, and made sure we could
-        measure it consistently before calling anything solved. That drove
-        multiple measurable changes: 25% over the debris capacity KPI on the
-        auto-empty system, a 90% improvement in debris pickup on a legacy SKU,
-        and a filter health concept approved for future development. The most
-        valuable thing I learned was adopting a consumer-oriented mindset and
-        fixing any product problems before they arise.
-      </p>
+      <div class="sn-outcome-grid">
+        <div class="sn-outcome-main">
+          <p class="po-conclusion">
+            During my co-op, most of my work lived in the gap between what a
+            product does on a spec sheet and how it performs in someone's home.
+            Instead of treating a passing test as a finished feature, I prioritized
+            what the customer would actually experience, and made sure we could
+            measure it consistently before calling anything solved. That drove
+            multiple measurable changes: 25% over the debris capacity KPI on the
+            auto-empty system, a 90% improvement in debris pickup on a legacy SKU,
+            and a filter health concept approved for future development. The most
+            valuable thing I learned was adopting a consumer-oriented mindset and
+            fixing any product problems before they arise.
+          </p>
 
-      <div class="po-stats po-stats-wide">
-        <div class="po-stat">
-          <p class="po-stat-num">25<span class="po-stat-unit">%</span></p>
-          <p class="po-stat-label">over the auto-empty debris capacity KPI</p>
+          <div class="po-stats po-stats-wide">
+            <div class="po-stat">
+              <p class="po-stat-num">25<span class="po-stat-unit">%</span></p>
+              <p class="po-stat-label">over the auto-empty debris capacity KPI</p>
+            </div>
+            <div class="po-stat">
+              <p class="po-stat-num">90<span class="po-stat-unit">%</span></p>
+              <p class="po-stat-label">better debris pickup on the Shark Rocket Turbo</p>
+            </div>
+            <div class="po-stat">
+              <p class="po-stat-num">$150<span class="po-stat-unit">M+</span></p>
+              <p class="po-stat-label">in forecasted annual revenue since launch</p>
+            </div>
+          </div>
         </div>
-        <div class="po-stat">
-          <p class="po-stat-num">90<span class="po-stat-unit">%</span></p>
-          <p class="po-stat-label">better debris pickup on the Shark Rocket Turbo</p>
-        </div>
-        <div class="po-stat">
-          <p class="po-stat-num">$150<span class="po-stat-unit">M+</span></p>
-          <p class="po-stat-label">in forecasted annual revenue since launch</p>
-        </div>
+
+        <figure class="po-figure po-closing-image">
+          <img src="assets/sharkninja/reflection.jpg" alt="The Shark Transformer in use in a living room" style="width: 100%; height: auto;">
+        </figure>
       </div>
-
-      <figure class="po-figure po-closing-image">
-        <img src="assets/sharkninja/reflection.jpg" alt="The Shark Transformer in use in a living room" style="width: 90%; height: auto;">
-      </figure>
     </section>
     </div>
   </div>
