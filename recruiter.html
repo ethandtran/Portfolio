@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ethan Tran — Recruiter Mode</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/png" href="assets/home/favicon.png">
+<link rel="apple-touch-icon" href="assets/home/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: "Exposure Trial VAR";
+    src: url("assets/home/ExposureTrialVAR.ttf") format("truetype-variations");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  :root {
+    --bg: #faf9f7;
+    --bg-panel: #f1efeb;
+    --ink: #1a1a18;
+    --ink-soft: #6d6c66;
+    --ink-faint: #a3a29b;
+    --line: #e4e2dc;
+    --blue: #5e9bd9;
+    --blue-soft: #cfe1f5;
+    --focus: #1a1a18;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #171613;
+      --bg-panel: #201f1b;
+      --ink: #f3f2ee;
+      --ink-soft: #a4a29a;
+      --ink-faint: #6f6d66;
+      --line: #322f29;
+      --blue: #6fabdc;
+      --blue-soft: #2d3a58;
+      --focus: #f3f2ee;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #171613;
+    --bg-panel: #201f1b;
+    --ink: #f3f2ee;
+    --ink-soft: #a4a29a;
+    --ink-faint: #6f6d66;
+    --line: #322f29;
+    --blue: #6fabdc;
+    --blue-soft: #2d3a58;
+    --focus: #f3f2ee;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { background: var(--bg); }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .rec-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26px 40px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rec-logo {
+    text-decoration: none;
+    font-size: 1.02rem;
+    font-weight: 300;
+    color: var(--ink);
+  }
+
+  .rec-exit {
+    text-decoration: none;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 16px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .rec-exit:hover {
+    color: var(--ink);
+    border-color: var(--ink-faint);
+  }
+
+  .rec-main { padding: 64px 0 100px; }
+
+  .rec-name {
+    font-family: "Exposure Trial VAR", Georgia, "Times New Roman", serif;
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    font-weight: 400;
+    margin: 0 0 14px;
+  }
+
+  .rec-tagline {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0 0 18px;
+  }
+
+  .rec-clock {
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-faint);
+    margin: 0 0 64px;
+  }
+
+  .rec-section { margin: 0 0 56px; }
+
+  .rec-section-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 4px;
+  }
+
+  .rec-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 16px 0 0;
+  }
+
+  .rec-exp-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rec-exp-row:last-child { border-bottom: none; }
+
+  .rec-exp-role {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .rec-exp-company {
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    margin: 4px 0 0;
+  }
+
+  .rec-exp-desc {
+    font-size: 0.92rem;
+    font-weight: 300;
+    color: var(--ink-soft);
+    max-width: 52ch;
+    margin: 10px 0 0;
+  }
+
+  .rec-exp-dates {
+    flex: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  .rec-proj-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .rec-proj-row:last-child { border-bottom: none; }
+  .rec-proj-row:hover { opacity: 0.7; }
+
+  .rec-proj-name {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .rec-proj-role {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin: 4px 0 0;
+  }
+
+  .rec-proj-link {
+    flex: none;
+    font-size: 0.85rem;
+    color: var(--blue);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 620px) {
+    .rec-header { padding: 20px 24px; }
+    .rec-main { padding: 44px 0 72px; }
+    .rec-exp-row,
+    .rec-proj-row { flex-direction: column; gap: 8px; }
+    .rec-exp-dates { order: -1; }
+  }
+</style>
+</head>
+<body>
+
+<header class="rec-header">
+  <a class="rec-logo" href="index.html">Ethan Tran</a>
+  <a class="rec-exit" href="index.html">Exit Recruiter Mode →</a>
+</header>
+
+<main class="rec-main">
+  <div class="wrap">
+    <h1 class="rec-name">Ethan Tran</h1>
+    <p class="rec-tagline">Product-minded engineer. Mechanical Engineering @ UC Irvine. Currently @ Scientific Horizons. Prev @ SharkNinja.</p>
+    <p class="rec-clock" id="recClock">&nbsp;</p>
+
+    <section class="rec-section">
+      <p class="rec-section-label">Experience</p>
+      <div class="rec-divider"></div>
+
+      <div class="rec-exp-row">
+        <div>
+          <p class="rec-exp-role">Device Engineer Intern</p>
+          <p class="rec-exp-company">Scientific Horizons</p>
+          <p class="rec-exp-desc">Conducting verification and validation testing for novel medical devices.</p>
+        </div>
+        <p class="rec-exp-dates">Jun 2026 – Present</p>
+      </div>
+
+      <div class="rec-exp-row">
+        <div>
+          <p class="rec-exp-role">Mechanical Engineering Co-op</p>
+          <p class="rec-exp-company">SharkNinja</p>
+          <p class="rec-exp-desc">Drove prototyping, failure analysis, and design across the product development lifecycle for consumer vacuum SKUs, serving as engineering lead on the Shark Navigator.</p>
+        </div>
+        <p class="rec-exp-dates">Jan – Jun 2026</p>
+      </div>
+    </section>
+
+    <section class="rec-section">
+      <p class="rec-section-label">Projects</p>
+      <div class="rec-divider"></div>
+
+      <a class="rec-proj-row" href="index.html#project-solar-car">
+        <div>
+          <p class="rec-proj-name">UCI Solar Car</p>
+          <p class="rec-proj-role">Suspension Engineer</p>
+        </div>
+        <span class="rec-proj-link">See project →</span>
+      </a>
+
+      <a class="rec-proj-row" href="index.html#project-keyak-lab">
+        <div>
+          <p class="rec-proj-name">UCI Keyak Lab</p>
+          <p class="rec-proj-role">Undergraduate Researcher</p>
+        </div>
+        <span class="rec-proj-link">See project →</span>
+      </a>
+    </section>
+  </div>
+</main>
+
+<script>
+  (function () {
+    // Same technique as index.html's footer clock (Intl.DateTimeFormat
+    // pinned to America/Los_Angeles), just with richer format options to
+    // get the fuller "1:40:28 AM PDT · 13 SEP 2026" display this page wants.
+    var el = document.getElementById('recClock');
+    function tick() {
+      try {
+        var now = new Date();
+        var timeStr = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/Los_Angeles',
+          hour: 'numeric', minute: '2-digit', second: '2-digit',
+          hour12: true, timeZoneName: 'short'
+        }).format(now);
+        var parts = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/Los_Angeles',
+          day: '2-digit', month: 'short', year: 'numeric'
+        }).formatToParts(now);
+        var day, month, year;
+        parts.forEach(function (p) {
+          if (p.type === 'day') day = p.value;
+          if (p.type === 'month') month = p.value.toUpperCase();
+          if (p.type === 'year') year = p.value;
+        });
+        el.textContent = timeStr + ' · ' + day + ' ' + month + ' ' + year;
+      } catch (e) { /* leave placeholder */ }
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
+
+</body>
+</html>
