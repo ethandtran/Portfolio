@@ -3745,6 +3745,17 @@
 
       var overlayStack = [];
 
+      // Keeps the URL in sync with whichever overlay is open (or none), so
+      // a refresh can restore the same page instead of dropping back home.
+      // replaceState (not pushState) so this doesn't spam browser history.
+      function syncHash() {
+        if (active) {
+          history.replaceState(null, '', '#project-' + active.getAttribute('data-project-panel'));
+        } else if (location.hash.indexOf('#project-') === 0) {
+          history.replaceState(null, '', location.pathname + location.search);
+        }
+      }
+
       function openProjectOverlay(name, trigger) {
         var overlay = byName[name];
         if (!overlay) return;
@@ -3764,6 +3775,7 @@
         overlay.focus({ preventScroll: true });
         updateScrollProgress();
         overlay.dispatchEvent(new Event('po:opened'));
+        syncHash();
       }
 
       function closeProjectOverlay() {
@@ -3780,6 +3792,7 @@
           active.focus({ preventScroll: true });
           updateScrollProgress();
           active.dispatchEvent(new Event('po:opened'));
+          syncHash();
           return;
         }
         active = null;
@@ -3788,6 +3801,7 @@
         if (lastTrigger && typeof lastTrigger.focus === 'function') {
           lastTrigger.focus({ preventScroll: true });
         }
+        syncHash();
       }
 
       document.querySelectorAll('.proj-tile[data-project]').forEach(function (tile) {
@@ -3821,6 +3835,24 @@
             window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
           }
         });
+      }
+
+      // Restore whichever overlay the URL points at on load (set by
+      // syncHash above), so refreshing a project page stays on that page
+      // instead of dropping back to home. Walks up through parent tiles
+      // first (e.g. Zekrom lives inside the CAD Projects hub) so the back
+      // button/stack ends up exactly like normal click-through navigation.
+      if (location.hash.indexOf('#project-') === 0) {
+        var restoreName = location.hash.slice('#project-'.length);
+        var chain = [];
+        var cursor = restoreName;
+        while (cursor && byName[cursor] && chain.indexOf(cursor) === -1) {
+          chain.unshift(cursor);
+          var parentTile = document.querySelector('.proj-tile[data-project="' + cursor + '"]');
+          var parentOverlay = parentTile ? parentTile.closest('.project-overlay[data-project-panel]') : null;
+          cursor = parentOverlay ? parentOverlay.getAttribute('data-project-panel') : null;
+        }
+        chain.forEach(function (n) { openProjectOverlay(n); });
       }
     })();
 
