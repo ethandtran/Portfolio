@@ -1592,16 +1592,9 @@
   }
 
   .po-next-tags .tag {
-    background: #f4f3ef;
-    color: #1a1a18;
-    font-family: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-weight: 300;
-    font-size: 0.85rem;
-    letter-spacing: -0.005em;
-    padding: 8px 15px;
-    border: none;
-    white-space: nowrap;
-    box-shadow: 0 6px 18px rgba(20, 18, 14, 0.14);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(6px);
+    border-color: transparent;
   }
 
   @media (max-width: 1060px) {
