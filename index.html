@@ -1664,6 +1664,17 @@
     .po-bottombar-inner { padding: 8px 24px 8px 16px; }
   }
 
+  /* Chromium on Windows can composite <video> through a separate hardware
+     overlay plane, which sometimes shows a hairline seam at one edge that
+     a screenshot tool won't capture (it grabs the painted page, not the
+     overlay). A non-identity transform forces the video into the normal
+     software/GPU compositing path instead of the overlay fast path, and
+     clipping via the wrapping figure hides the harmless 1-2% overscan
+     that comes with it. Applied to every video on the site as a blanket
+     fix, not just the ones already patched with a more specific rule. */
+  :is(.po-figure, .po-video):has(video) { overflow: hidden; }
+  video { transform: scale(1.015); }
+
 </style>
 </head>
 <body>
