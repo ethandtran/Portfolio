@@ -3808,6 +3808,20 @@
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && active) closeProjectOverlay();
       });
+
+      // Logo/name in the nav: if a project overlay (or a stack of nested
+      // ones) is open, close all of them and return to the actual home
+      // page instead of just jumping the #top hash behind them.
+      var logoLink = document.querySelector('.logo');
+      if (logoLink) {
+        logoLink.addEventListener('click', function (e) {
+          if (active) {
+            e.preventDefault();
+            while (active) closeProjectOverlay();
+            window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+          }
+        });
+      }
     })();
 
     // Record player: click to toggle background music
