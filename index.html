@@ -19,6 +19,7 @@
     --blue: #5e9bd9;
     --blue-soft: #cfe1f5;
     --focus: #1a1a18;
+    --nav-h: 80px;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -96,9 +97,11 @@
   /* ---------- Nav ---------- */
 
   .site-nav {
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 40;
+    left: 0;
+    right: 0;
+    z-index: 510;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -110,6 +113,9 @@
   }
 
   .site-nav.scrolled { border-bottom-color: var(--line); }
+
+  /* nav is position:fixed (out of flow), so the page needs the clearance back */
+  main#top { padding-top: var(--nav-h); }
 
   .logo {
     display: flex;
@@ -1175,7 +1181,7 @@
   .project-overlay-inner {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 56px 40px 60px;
+    padding: calc(var(--nav-h) + 40px) 40px 60px;
     display: grid;
     grid-template-columns: 130px minmax(0, 1fr);
     gap: 40px;
@@ -1184,7 +1190,7 @@
 
   .po-rail {
     position: sticky;
-    top: 96px;
+    top: calc(var(--nav-h) + 16px);
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -1612,7 +1618,7 @@
   }
 
   @media (max-width: 820px) {
-    .project-overlay-inner { padding: 40px 24px 40px; }
+    .project-overlay-inner { padding: calc(var(--nav-h) + 24px) 24px 40px; }
     .po-bottombar-inner { padding: 8px 24px 8px 16px; }
   }
 
@@ -1718,7 +1724,7 @@
           <span class="proj-tile-fallback">UCI HyperXite</span>
           <img class="proj-tile-img" src="assets/home/hyperxite-cover.jpg" alt="" onerror="this.style.display='none'" onload="this.previousElementSibling.style.display='none'">
           <div class="proj-tile-scrim"></div>
-          <img class="proj-tile-logo" src="assets/home/hyperxite-logo.png" alt="UCI HyperXite">
+          <img class="proj-tile-logo" style="width: 77px;" src="assets/home/hyperxite-logo.png" alt="UCI HyperXite">
           <span class="proj-tile-status">Jul 2026 – Present</span>
           <div class="proj-tile-tags">
             <span class="tag">UCI HyperXite</span>
@@ -1729,7 +1735,7 @@
           <span class="proj-tile-fallback">UCI Solar Car</span>
           <img class="proj-tile-img" src="assets/home/solar-car-cover.jpg" alt="" onerror="this.style.display='none'" onload="this.previousElementSibling.style.display='none'">
           <div class="proj-tile-scrim"></div>
-          <img class="proj-tile-logo" style="width: 150px;" src="assets/home/solar-car-logo.webp" alt="ZotSun Solar Racing">
+          <img class="proj-tile-logo" style="width: 165px;" src="assets/home/solar-car-logo.webp" alt="ZotSun Solar Racing">
           <span class="proj-tile-status">Apr 2025 – Jun 2026</span>
           <div class="proj-tile-tags">
             <span class="tag">UCI Solar Car</span>
@@ -2204,11 +2210,11 @@
         </div>
         <div class="po-media-portrait-row" style="margin-top: 40px;">
         <figure class="po-figure">
-          <video src="assets/sharkninja/autoempty-fail.mp4" playsinline controls preload="metadata"></video>
+          <video src="assets/sharkninja/autoempty-fail.mp4" muted playsinline controls preload="metadata"></video>
           <figcaption class="po-figcaption">Before: auto-empty failing without the fin</figcaption>
         </figure>
         <figure class="po-figure">
-          <video style="object-fit: cover;" src="assets/sharkninja/autoempty-pass.mp4" playsinline controls preload="metadata"></video>
+          <video style="object-fit: cover;" src="assets/sharkninja/autoempty-pass.mp4" muted playsinline controls preload="metadata"></video>
           <figcaption class="po-figcaption">After: auto-empty passing with the fin added</figcaption>
         </figure>
         </div>
@@ -2257,11 +2263,11 @@
       </div>
       <div class="po-media-portrait-row po-media-portrait-row-tall">
         <figure class="po-figure">
-          <video src="assets/sharkninja/reverse-cleaning-before.mp4" playsinline controls preload="metadata"></video>
+          <video src="assets/sharkninja/reverse-cleaning-before.mp4" muted playsinline controls preload="metadata"></video>
           <figcaption class="po-figcaption">Before: poor reverse cleaning</figcaption>
         </figure>
         <figure class="po-figure">
-          <video src="assets/sharkninja/reverse-cleaning-after.mp4" playsinline controls preload="metadata"></video>
+          <video src="assets/sharkninja/reverse-cleaning-after.mp4" muted playsinline controls preload="metadata"></video>
           <figcaption class="po-figcaption">After: fixed articulating squeegee and improved reverse cleaning</figcaption>
         </figure>
       </div>
@@ -2292,7 +2298,7 @@
           <figcaption class="po-figcaption">My Arduino pressure differential rig</figcaption>
         </figure>
         <figure class="po-figure">
-          <video src="assets/sharkninja/live-filter-indicator.mp4" playsinline controls preload="metadata"></video>
+          <video src="assets/sharkninja/live-filter-indicator.mp4" muted playsinline controls preload="metadata" aria-label="Filter health rig demo, click the speaker icon for sound"></video>
           <figcaption class="po-figcaption">Monitoring filter health in real time</figcaption>
         </figure>
       </div>
@@ -3292,6 +3298,15 @@
     window.addEventListener('scroll', function () {
       nav.classList.toggle('scrolled', window.scrollY > 20);
     }, { passive: true });
+
+    // The nav now sits above project overlays too (see .site-nav z-index),
+    // so overlay content needs real clearance instead of a guessed value.
+    var syncNavHeight = function () {
+      document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+    };
+    syncNavHeight();
+    window.addEventListener('resize', syncNavHeight);
+    if ('ResizeObserver' in window) new ResizeObserver(syncNavHeight).observe(nav);
 
     // Resume dropdowns (nav + footer): blur the link after a click so the
     // menu doesn't stay stuck open once the mouse leaves (a clicked link
