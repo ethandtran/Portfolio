@@ -1518,8 +1518,6 @@
     animation-duration: var(--filmstrip-duration, 32s);
   }
 
-  .po-filmstrip:hover .po-filmstrip-track { animation-play-state: paused; }
-
   .po-filmstrip-item {
     flex: none;
     height: var(--filmstrip-height, 240px);
@@ -3565,10 +3563,31 @@
         });
       };
       document.querySelectorAll('.proj-tile').forEach(bindCursorBubble);
+
       // Filmstrip photos (Zekrom, Ice Cream Cow Robot): same hover bubble,
-      // showing each photo's caption. Duplicated slides used purely for
-      // the seamless scroll loop are aria-hidden and skip the label.
-      document.querySelectorAll('.po-filmstrip-item[data-cursor-label]').forEach(bindCursorBubble);
+      // but the photos keep sliding under the cursor even while hovering,
+      // so binding enter/leave per-photo like above races and flickers as
+      // items slide in and out from under a stationary pointer. Instead,
+      // bind enter/leave once on the strip itself (it doesn't move) and
+      // use elementFromPoint on every mousemove to find whichever photo is
+      // currently under the cursor and show its caption.
+      document.querySelectorAll('.po-filmstrip').forEach(function (strip) {
+        strip.addEventListener('mouseenter', function () {
+          cursorBubble.classList.add('is-visible');
+          if (cursorDot) cursorDot.classList.remove('is-visible');
+        });
+        strip.addEventListener('mousemove', function (e) {
+          cursorBubble.style.left = e.clientX + 'px';
+          cursorBubble.style.top = e.clientY + 'px';
+          var el = document.elementFromPoint(e.clientX, e.clientY);
+          var item = el && el.closest('.po-filmstrip-item[data-cursor-label]');
+          if (item) cursorBubble.textContent = item.getAttribute('data-cursor-label');
+        });
+        strip.addEventListener('mouseleave', function () {
+          cursorBubble.classList.remove('is-visible');
+          if (cursorDot) cursorDot.classList.add('is-visible');
+        });
+      });
     }
 
 
