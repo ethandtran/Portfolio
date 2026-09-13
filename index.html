@@ -1502,6 +1502,49 @@
     .po-carousel-slide { transition: none; }
   }
 
+  .po-filmstrip {
+    overflow: hidden;
+    width: 100%;
+    margin: 48px 0 0;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  }
+
+  .po-filmstrip-track {
+    display: flex;
+    width: max-content;
+    gap: 8px;
+    animation: po-filmstrip-scroll linear infinite;
+    animation-duration: var(--filmstrip-duration, 32s);
+  }
+
+  .po-filmstrip:hover .po-filmstrip-track { animation-play-state: paused; }
+
+  .po-filmstrip-item {
+    flex: none;
+    height: var(--filmstrip-height, 240px);
+  }
+
+  .po-filmstrip-item img {
+    display: block;
+    height: 100%;
+    width: auto;
+    border-radius: 4px;
+  }
+
+  @keyframes po-filmstrip-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .po-filmstrip-track { animation: none; }
+  }
+
+  @media (max-width: 620px) {
+    .po-filmstrip-item { height: var(--filmstrip-height-mobile, 160px); }
+  }
+
   @media (max-width: 1060px) {
     #sn-fin-compare-row > figure { max-width: 100% !important; }
   }
@@ -3117,29 +3160,11 @@
 </div>
 
 <div class="project-overlay" id="projectOverlayZekrom" data-project-panel="zekrom" role="dialog" aria-modal="true" aria-label="Zekrom project detail">
-  <div class="project-overlay-inner">
-    <nav class="po-rail" aria-label="Section progress">
-      <a class="po-rail-item" href="#zk-context" data-po-target="zk-context">Context</a>
-      <a class="po-rail-item" href="#zk-modeling" data-po-target="zk-modeling">Modeling</a>
-      <a class="po-rail-item" href="#zk-reflection" data-po-target="zk-reflection">Reflection</a>
-    </nav>
-
-    <div class="po-main">
-      <div id="zk-context">
+  <div class="project-overlay-inner" style="grid-template-columns: 1fr;">
+    <div class="po-main" style="max-width: 780px; margin: 0 auto;">
       <h1 class="po-title-row">
         <span class="po-title-main">Zekrom</span>
       </h1>
-
-      <div class="po-divider"></div>
-
-      <div class="po-hero" data-hero-for="zekrom"></div>
-
-      <p class="po-intro">
-        For MAE 52 at UC Irvine, I modeled Zekrom, a legendary Pokemon, in
-        SolidWorks. I already had some SolidWorks experience by this
-        point, so I used the project as a chance to push into features I
-        hadn't tried before: revolves, surfaces, and split lines.
-      </p>
 
       <div class="po-divider"></div>
 
@@ -3147,75 +3172,51 @@
         <div class="po-meta-row">
           <span class="po-meta-pair"><span class="po-meta-label">role</span><span class="po-meta-value">Personal Project</span></span>
           <span class="po-meta-pair"><span class="po-meta-label">course</span><span class="po-meta-value">MAE 52</span></span>
+          <span class="po-meta-pair"><span class="po-meta-label">time</span><span class="po-meta-value">~50 hours</span></span>
         </div>
         <div class="po-meta-row">
-          <span class="po-meta-pair"><span class="po-meta-label">time</span><span class="po-meta-value">~50 hours</span></span>
           <span class="po-meta-pair"><span class="po-meta-label">tools</span><span class="po-meta-value">SolidWorks, SolidWorks Visualize, Finite Element Analysis</span></span>
         </div>
       </div>
 
-      <div class="po-divider po-divider-end"></div>
-      </div>
+      <div class="po-divider"></div>
 
-    <section class="po-section" id="zk-modeling">
-      <p class="po-section-num">01 &middot; Modeling</p>
-      <h2 class="po-section-title">Sixteen parts, one legendary tail</h2>
-      <div class="po-section-body">
-        <p>
-          Beyond the surfacing work, I wanted Zekrom's joints to move
-          properly, so I built assembly mates that let the tail and head
-          spin, the wings flap, and the legs, arms, and fingers articulate.
-          Once the assembly, sixteen parts in total, was finished, I used
-          SolidWorks Visualize to render it, and ran a finite element
-          analysis on the tail to see how it would hold up under a
-          hypothetical battle.
-        </p>
-      </div>
-      <figure class="po-figure po-carousel" style="max-width: 620px;">
-        <div class="po-carousel-track" style="aspect-ratio: 879 / 721;">
-          <div class="po-carousel-slide is-active"><img src="assets/cad-projects/zekrom-isometric.jpg" alt="Zekrom rendered in SolidWorks Visualize, isometric view"></div>
-          <div class="po-carousel-slide"><img src="assets/cad-projects/zekrom-front.jpg" alt="Zekrom, front view"></div>
-          <div class="po-carousel-slide"><img src="assets/cad-projects/zekrom-side.jpg" alt="Zekrom, side view"></div>
-          <div class="po-carousel-slide"><img src="assets/cad-projects/zekrom-back.jpg" alt="Zekrom, back view"></div>
-        </div>
-        <div class="po-carousel-dots">
-          <button type="button" class="po-carousel-dot is-active" aria-label="Isometric view"></button>
-          <button type="button" class="po-carousel-dot" aria-label="Front view"></button>
-          <button type="button" class="po-carousel-dot" aria-label="Side view"></button>
-          <button type="button" class="po-carousel-dot" aria-label="Back view"></button>
-        </div>
-        <figcaption class="po-figcaption" data-carousel-caption>Zekrom, rendered in SolidWorks Visualize (isometric view)</figcaption>
-      </figure>
-      <div class="po-media-row po-media-row-3">
-        <figure class="po-figure po-media-contain">
-          <div class="po-media" style="aspect-ratio: 1070 / 742;"><img src="assets/cad-projects/zekrom-exploded.jpg" alt="Zekrom, exploded view of the sixteen-part assembly"></div>
-          <figcaption class="po-figcaption">Exploded view</figcaption>
-        </figure>
-        <figure class="po-figure po-media-contain">
-          <div class="po-media" style="aspect-ratio: 1000 / 580;"><img src="assets/cad-projects/zekrom-stress-sim.jpg" alt="Stress simulation on Zekrom's tail"></div>
-          <figcaption class="po-figcaption">Stress simulation</figcaption>
-        </figure>
-        <figure class="po-figure po-media-contain">
-          <div class="po-media" style="aspect-ratio: 1000 / 597;"><img src="assets/cad-projects/zekrom-displacement-sim.jpg" alt="Displacement simulation on Zekrom's tail"></div>
-          <figcaption class="po-figcaption">Displacement simulation</figcaption>
-        </figure>
-      </div>
-    </section>
+      <p class="po-intro">
+        For MAE 52 at UC Irvine, I modeled Zekrom, a legendary Pokemon, in
+        SolidWorks, using it as a chance to push into features I hadn't
+        tried before: revolves, surfaces, and split lines. Beyond the
+        surfacing work, I wanted the joints to move properly, so I built
+        assembly mates that let the tail and head spin, the wings flap,
+        and the legs, arms, and fingers articulate. Once the sixteen-part
+        assembly was finished, I rendered it in SolidWorks Visualize and
+        ran a finite element analysis on the tail to see how it would
+        hold up under a hypothetical battle. Modeling a character instead
+        of a functional part pushed me to think about surfacing and joint
+        articulation differently than my other coursework had, and it's
+        the project where I most deliberately picked up new SolidWorks
+        skills on purpose rather than out of necessity.
+      </p>
 
-    <section class="po-section" id="zk-reflection">
-      <p class="po-section-num">02 &middot; Reflection</p>
-      <h2 class="po-section-title">Fifty hours with a Pokemon</h2>
-      <div class="po-section-body">
-        <p>
-          Modeling a character instead of a functional part forced me to
-          think about surfacing and joint articulation in a way my other
-          coursework hadn't. It's a small, self-contained project compared
-          to the team builds, but it's the one where I most deliberately
-          picked up new SolidWorks skills on purpose rather than out of
-          necessity.
-        </p>
+      <div class="po-filmstrip" style="--filmstrip-duration: 34s;">
+        <div class="po-filmstrip-track">
+          <div class="po-filmstrip-item" data-cursor-label="Rendered in SolidWorks Visualize"><img src="assets/cad-projects/zekrom-render.jpg" alt="Zekrom rendered in SolidWorks Visualize, in a battle arena"></div>
+          <div class="po-filmstrip-item" data-cursor-label="Isometric view"><img src="assets/cad-projects/zekrom-isometric.jpg" alt="Zekrom, isometric view"></div>
+          <div class="po-filmstrip-item" data-cursor-label="Front view"><img src="assets/cad-projects/zekrom-front.jpg" alt="Zekrom, front view"></div>
+          <div class="po-filmstrip-item" data-cursor-label="Side view"><img src="assets/cad-projects/zekrom-side.jpg" alt="Zekrom, side view"></div>
+          <div class="po-filmstrip-item" data-cursor-label="Back view"><img src="assets/cad-projects/zekrom-back.jpg" alt="Zekrom, back view"></div>
+          <div class="po-filmstrip-item" data-cursor-label="Exploded view, sixteen parts"><img src="assets/cad-projects/zekrom-exploded.jpg" alt="Zekrom, exploded view of the sixteen-part assembly"></div>
+          <div class="po-filmstrip-item" data-cursor-label="Stress simulation on the tail"><img src="assets/cad-projects/zekrom-stress-sim.jpg" alt="Stress simulation on Zekrom's tail"></div>
+          <div class="po-filmstrip-item" data-cursor-label="Displacement simulation on the tail"><img src="assets/cad-projects/zekrom-displacement-sim.jpg" alt="Displacement simulation on Zekrom's tail"></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/zekrom-render.jpg" alt=""></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/zekrom-isometric.jpg" alt=""></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/zekrom-front.jpg" alt=""></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/zekrom-side.jpg" alt=""></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/zekrom-back.jpg" alt=""></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/zekrom-exploded.jpg" alt=""></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/zekrom-stress-sim.jpg" alt=""></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/zekrom-displacement-sim.jpg" alt=""></div>
+        </div>
       </div>
-    </section>
     </div>
   </div>
 
@@ -3241,28 +3242,11 @@
 </div>
 
 <div class="project-overlay" id="projectOverlayIceCreamCowRobot" data-project-panel="ice-cream-cow-robot" role="dialog" aria-modal="true" aria-label="Ice Cream Cow Robot project detail">
-  <div class="project-overlay-inner">
-    <nav class="po-rail" aria-label="Section progress">
-      <a class="po-rail-item" href="#icr-context" data-po-target="icr-context">Context</a>
-      <a class="po-rail-item" href="#icr-modeling" data-po-target="icr-modeling">Modeling</a>
-      <a class="po-rail-item" href="#icr-reflection" data-po-target="icr-reflection">Reflection</a>
-    </nav>
-
-    <div class="po-main">
-      <div id="icr-context">
+  <div class="project-overlay-inner" style="grid-template-columns: 1fr;">
+    <div class="po-main" style="max-width: 780px; margin: 0 auto;">
       <h1 class="po-title-row">
         <span class="po-title-main">Ice Cream Cow Robot</span>
       </h1>
-
-      <div class="po-divider"></div>
-
-      <div class="po-hero" data-hero-for="ice-cream-cow-robot"></div>
-
-      <p class="po-intro">
-        I came across a video of an ice cream cow robot online and thought
-        it'd be a good challenge to reverse-engineer in SolidWorks, with
-        nothing to go on but what I could see on screen.
-      </p>
 
       <div class="po-divider"></div>
 
@@ -3273,51 +3257,33 @@
         </div>
       </div>
 
-      <div class="po-divider po-divider-end"></div>
-      </div>
+      <div class="po-divider"></div>
 
-    <section class="po-section" id="icr-modeling">
-      <p class="po-section-num">01 &middot; Modeling</p>
-      <h2 class="po-section-title">Reverse-engineering from a video</h2>
-      <div class="po-section-body">
-        <p>
-          With no reference drawings or measurements to work from, I
-          modeled the robot's seven parts by eye, then built angle mates
-          to control how each one moved. Getting the linkages right meant
-          calculating measurements by hand until the assembly moved with
-          five degrees of freedom, close to how the original appeared to
-          move on screen.
-        </p>
-      </div>
-      <figure class="po-figure po-media-contain" style="max-width: 480px;">
-        <div class="po-media" style="aspect-ratio: 636 / 573;"><img src="assets/cad-projects/ice-cream-isometric.jpg" alt="The completed ice cream cow robot assembly, isometric view"></div>
-        <figcaption class="po-figcaption">The completed assembly, modeled from video alone</figcaption>
-      </figure>
-      <div class="po-media-row">
-        <figure class="po-figure po-media-contain">
-          <div class="po-media" style="aspect-ratio: 662 / 625;"><img src="assets/cad-projects/ice-cream-exploded.jpg" alt="Exploded view of the ice cream cow robot's seven parts"></div>
-          <figcaption class="po-figcaption">Exploded view of the seven components</figcaption>
-        </figure>
-        <figure class="po-figure po-media-contain">
-          <div class="po-media" style="aspect-ratio: 562 / 557;"><img src="assets/cad-projects/ice-cream-front.jpg" alt="Front view of the ice cream cow robot"></div>
-          <figcaption class="po-figcaption">Front view</figcaption>
-        </figure>
-      </div>
-    </section>
+      <p class="po-intro">
+        I came across a video of an ice cream cow robot online and thought
+        it'd be a good challenge to reverse-engineer in SolidWorks, with
+        nothing to go on but what I could see on screen. With no reference
+        drawings or measurements to work from, I modeled the robot's seven
+        parts by eye, then built angle mates to control how each one
+        moved, calculating the linkages by hand until the assembly moved
+        with five degrees of freedom, close to how the original appeared
+        to move on screen. It wasn't assigned by anyone, which is exactly
+        why I wanted to do it: reverse-engineering a random object off the
+        internet, with no CAD files or dimensions to start from, honed a
+        skill that's come in handy since, looking at something that
+        already exists and figuring out how it was actually built.
+      </p>
 
-    <section class="po-section" id="icr-reflection">
-      <p class="po-section-num">02 &middot; Reflection</p>
-      <h2 class="po-section-title">Five degrees of freedom, zero instructions</h2>
-      <div class="po-section-body">
-        <p>
-          This one wasn't assigned by anyone, which is exactly why I
-          wanted to do it. Reverse-engineering a random object off the
-          internet, with no CAD files or dimensions to start from, honed a
-          skill that's come in handy since: looking at something that
-          already exists and figuring out how it was actually built.
-        </p>
+      <div class="po-filmstrip" style="--filmstrip-duration: 20s;">
+        <div class="po-filmstrip-track">
+          <div class="po-filmstrip-item" data-cursor-label="The completed assembly, modeled from video alone"><img src="assets/cad-projects/ice-cream-isometric.jpg" alt="The completed ice cream cow robot assembly, isometric view"></div>
+          <div class="po-filmstrip-item" data-cursor-label="Exploded view of the seven components"><img src="assets/cad-projects/ice-cream-exploded.jpg" alt="Exploded view of the ice cream cow robot's seven parts"></div>
+          <div class="po-filmstrip-item" data-cursor-label="Front view"><img src="assets/cad-projects/ice-cream-front.jpg" alt="Front view of the ice cream cow robot"></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/ice-cream-isometric.jpg" alt=""></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/ice-cream-exploded.jpg" alt=""></div>
+          <div class="po-filmstrip-item" aria-hidden="true"><img src="assets/cad-projects/ice-cream-front.jpg" alt=""></div>
+        </div>
       </div>
-    </section>
     </div>
   </div>
 
@@ -3582,22 +3548,27 @@
     // Cursor-follow bubble on work/project tiles ("see work" / "see project")
     var cursorBubble = document.getElementById('cursorBubble');
     if (cursorBubble && hasFinePointer) {
-      document.querySelectorAll('.proj-tile').forEach(function (tile) {
-        var label = tile.getAttribute('data-cursor-label') || '';
-        tile.addEventListener('mouseenter', function () {
+      var bindCursorBubble = function (el) {
+        var label = el.getAttribute('data-cursor-label') || '';
+        el.addEventListener('mouseenter', function () {
           cursorBubble.textContent = label;
           cursorBubble.classList.add('is-visible');
           if (cursorDot) cursorDot.classList.remove('is-visible');
         });
-        tile.addEventListener('mousemove', function (e) {
+        el.addEventListener('mousemove', function (e) {
           cursorBubble.style.left = e.clientX + 'px';
           cursorBubble.style.top = e.clientY + 'px';
         });
-        tile.addEventListener('mouseleave', function () {
+        el.addEventListener('mouseleave', function () {
           cursorBubble.classList.remove('is-visible');
           if (cursorDot) cursorDot.classList.add('is-visible');
         });
-      });
+      };
+      document.querySelectorAll('.proj-tile').forEach(bindCursorBubble);
+      // Filmstrip photos (Zekrom, Ice Cream Cow Robot): same hover bubble,
+      // showing each photo's caption. Duplicated slides used purely for
+      // the seamless scroll loop are aria-hidden and skip the label.
+      document.querySelectorAll('.po-filmstrip-item[data-cursor-label]').forEach(bindCursorBubble);
     }
 
 
