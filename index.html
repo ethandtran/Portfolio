@@ -1543,6 +1543,62 @@
     .po-filmstrip-item { height: var(--filmstrip-height-mobile, 160px); }
   }
 
+  .po-next {
+    display: block;
+    margin: 72px 0 0;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .po-next-label {
+    display: block;
+    font-family: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 14px;
+  }
+
+  .po-next-media {
+    position: relative;
+    aspect-ratio: 16 / 7;
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--bg-panel);
+  }
+
+  .po-next-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .po-next:hover .po-next-media img { transform: scale(1.035); }
+
+  .po-next-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10, 9, 7, 0.55), rgba(10, 9, 7, 0) 55%);
+  }
+
+  .po-next-title {
+    position: absolute;
+    left: 24px;
+    bottom: 18px;
+    font-family: "Exposure Trial VAR", Georgia, "Times New Roman", serif;
+    font-size: 1.6rem;
+    color: #fff;
+  }
+
+  @media (max-width: 620px) {
+    .po-next-media { aspect-ratio: 4 / 3; }
+    .po-next-title { font-size: 1.3rem; left: 18px; bottom: 14px; }
+  }
+
   @media (max-width: 1060px) {
     #sn-fin-compare-row > figure { max-width: 100% !important; }
   }
@@ -3806,6 +3862,79 @@
             openProjectOverlay(name, tile);
           }
         });
+      });
+
+      // "Next project" card at the bottom of every project page, cycling
+      // through this fixed order. Built from the matching tile's own
+      // image/name rather than duplicating that data, same idea as the
+      // .po-hero reuse above.
+      var projectOrder = [
+        'sharkninja', 'solar-car', 'keyak-lab', 'autonomous-rover',
+        'rc-drone', 'rc-rover', 'cad-projects', 'zekrom', 'ice-cream-cow-robot'
+      ];
+      var cursorBubbleEl = document.getElementById('cursorBubble');
+      var cursorDotEl = document.getElementById('cursorDot');
+      var nextHasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      projectOrder.forEach(function (name, i) {
+        var overlay = byName[name];
+        if (!overlay) return;
+        var nextName = projectOrder[(i + 1) % projectOrder.length];
+        var nextTile = document.querySelector('.proj-tile[data-project="' + nextName + '"]');
+        var main = overlay.querySelector('.po-main');
+        if (!nextTile || !main) return;
+        var nextImg = nextTile.querySelector('.proj-tile-img');
+        var nextLabel = nextTile.querySelector('.proj-tile-fallback');
+        if (!nextImg || !nextImg.getAttribute('src')) return;
+
+        var link = document.createElement('a');
+        link.className = 'po-next';
+        link.href = '#project-' + nextName;
+
+        var label = document.createElement('span');
+        label.className = 'po-next-label';
+        label.textContent = 'Next project';
+
+        var media = document.createElement('div');
+        media.className = 'po-next-media';
+
+        var img = document.createElement('img');
+        img.src = nextImg.getAttribute('src');
+        img.alt = '';
+
+        var scrim = document.createElement('div');
+        scrim.className = 'po-next-scrim';
+
+        var title = document.createElement('span');
+        title.className = 'po-next-title';
+        title.textContent = nextLabel ? nextLabel.textContent : nextName;
+
+        media.appendChild(img);
+        media.appendChild(scrim);
+        media.appendChild(title);
+        link.appendChild(label);
+        link.appendChild(media);
+        main.appendChild(link);
+
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          openProjectOverlay(nextName, link);
+        });
+
+        if (cursorBubbleEl && nextHasFinePointer) {
+          link.addEventListener('mouseenter', function () {
+            cursorBubbleEl.textContent = 'see project';
+            cursorBubbleEl.classList.add('is-visible');
+            if (cursorDotEl) cursorDotEl.classList.remove('is-visible');
+          });
+          link.addEventListener('mousemove', function (e) {
+            cursorBubbleEl.style.left = e.clientX + 'px';
+            cursorBubbleEl.style.top = e.clientY + 'px';
+          });
+          link.addEventListener('mouseleave', function () {
+            cursorBubbleEl.classList.remove('is-visible');
+            if (cursorDotEl) cursorDotEl.classList.add('is-visible');
+          });
+        }
       });
 
       if (backBtn) backBtn.addEventListener('click', closeProjectOverlay);
