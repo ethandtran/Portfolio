@@ -29,6 +29,7 @@
     --blue: #5e9bd9;
     --blue-soft: #cfe1f5;
     --focus: #1a1a18;
+    --nav-h: 80px;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -80,37 +81,210 @@
     padding: 0 24px;
   }
 
-  .rec-header {
+  /* ---------- Nav (same component as index.html) ---------- */
+
+  .site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 510;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 26px 40px;
-    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.25s ease;
   }
 
-  .rec-logo {
+  .site-nav.scrolled { border-bottom-color: var(--line); }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     text-decoration: none;
+    color: var(--ink-faint);
+  }
+
+  .logo-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-color: var(--ink);
+    -webkit-mask: url('assets/home/logo-icon.png') no-repeat center / contain;
+    mask: url('assets/home/logo-icon.png') no-repeat center / contain;
+  }
+
+  .logo-word {
+    font-family: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 1.02rem;
     font-weight: 300;
     color: var(--ink);
   }
 
-  .rec-exit {
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    font-size: 0.92rem;
+    font-weight: 300;
+    letter-spacing: 0.005em;
+    color: var(--ink);
+  }
+
+  .nav-links a,
+  .nav-links button {
+    text-decoration: none;
+    transition: color 0.15s ease, filter 0.25s ease, opacity 0.25s ease;
+    filter: blur(0);
+    opacity: 1;
+  }
+
+  .nav-links a:hover,
+  .nav-links button:hover { color: var(--ink); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nav-links:hover a:not(:hover),
+    .nav-links:hover button:not(:hover) {
+      filter: blur(1.5px);
+      opacity: 0.6;
+    }
+
+    .nav-links:hover .nav-dropdown:hover a:not(:hover),
+    .nav-links:hover .nav-dropdown:hover button:not(:hover) {
+      filter: none;
+      opacity: 1;
+    }
+  }
+
+  .nav-combo { display: inline-flex; align-items: center; gap: 6px; }
+
+  .ext-arrow {
+    display: inline-block;
+    width: 0;
+    overflow: hidden;
+    opacity: 0;
+    line-height: 1;
+    vertical-align: middle;
+    transform: translate(-3px, 3px);
+    transition: opacity 0.18s ease, transform 0.18s ease, width 0.18s ease, margin-left 0.18s ease;
+  }
+
+  .nav-combo a:hover .ext-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+    width: 0.75em;
+    margin-left: 2px;
+  }
+
+  .nav-dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .nav-dropdown-trigger {
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 4px 8px;
+    margin: -4px -8px;
+    border-radius: 6px;
+    transition: color 0.15s ease, filter 0.25s ease, opacity 0.25s ease, background 0.15s ease;
+  }
+
+  .nav-dropdown:hover > .nav-dropdown-trigger,
+  .nav-dropdown:focus-within > .nav-dropdown-trigger {
+    background: var(--bg);
+  }
+
+  .nav-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding-top: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    z-index: 50;
+  }
+
+  .nav-dropdown-menu-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 12px;
+    margin: -10px -12px;
+    border-radius: 8px;
+    background: var(--bg);
+  }
+
+  .nav-dropdown-menu-inner a {
+    font-family: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 300;
+    letter-spacing: 0.005em;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .nav-dropdown-menu-inner a:hover {
+    color: var(--ink);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nav-dropdown:hover .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+
+  .nav-dropdown:focus-within .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 620px) {
+    .site-nav { padding: 20px 24px; }
+    .nav-links { gap: 12px; font-size: 0.78rem; }
+    .logo-word { display: none; }
+  }
+
+  /* ---------- Recruiter mode content ---------- */
+
+  .rec-exit-fixed {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    z-index: 520;
     text-decoration: none;
     font-size: 0.82rem;
     color: var(--ink-soft);
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--line);
     border-radius: 999px;
     padding: 8px 16px;
     transition: color 0.15s ease, border-color 0.15s ease;
   }
 
-  .rec-exit:hover {
+  .rec-exit-fixed:hover {
     color: var(--ink);
     border-color: var(--ink-faint);
   }
 
-  .rec-main { padding: 64px 0 100px; }
+  .rec-main { padding: calc(var(--nav-h) + 64px) 0 100px; }
 
   .rec-name {
     font-family: "Exposure Trial VAR", Georgia, "Times New Roman", serif;
@@ -227,20 +401,41 @@
   }
 
   @media (max-width: 620px) {
-    .rec-header { padding: 20px 24px; }
-    .rec-main { padding: 44px 0 72px; }
+    .site-nav { padding: 20px 24px; }
+    .rec-main { padding: calc(var(--nav-h) + 32px) 0 90px; }
     .rec-exp-row,
     .rec-proj-row { flex-direction: column; gap: 8px; }
     .rec-exp-dates { order: -1; }
+    .rec-exit-fixed { left: 16px; bottom: 16px; font-size: 0.78rem; padding: 7px 14px; }
   }
 </style>
 </head>
 <body>
 
-<header class="rec-header">
-  <a class="rec-logo" href="index.html">Ethan Tran</a>
-  <a class="rec-exit" href="index.html">Exit Recruiter Mode →</a>
-</header>
+<nav class="site-nav" id="siteNav" aria-label="Primary">
+  <a class="logo" href="index.html" aria-label="Home">
+    <span class="logo-icon" aria-hidden="true"></span>
+    <span class="logo-word">Ethan Tran</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#work">work</a>
+    <a href="index.html#projects">projects</a>
+    <a href="index.html#about">about</a>
+    <span class="nav-combo">
+      <span class="nav-dropdown">
+        <button type="button" class="nav-dropdown-trigger">resume</button>
+        <span class="nav-dropdown-menu">
+          <span class="nav-dropdown-menu-inner">
+            <a href="https://docs.google.com/document/d/1rJEJRMKceWwP73SUO2LYY76DwfyI2juCGerYz3LcPVM/edit?usp=sharing" target="_blank" rel="noopener">engineering<span class="ext-arrow" aria-hidden="true">↗</span></a>
+            <a href="https://docs.google.com/document/d/1BtlsLGTcUjhMwRgH1eqHENIqk-EYnM8XyZsXeI-KRIs/edit?usp=sharing" target="_blank" rel="noopener">product<span class="ext-arrow" aria-hidden="true">↗</span></a>
+          </span>
+        </span>
+      </span> / <a href="https://www.linkedin.com/in/ethandtran/" target="_blank" rel="noopener">linkedin<span class="ext-arrow" aria-hidden="true">↗</span></a>
+    </span>
+  </div>
+</nav>
+
+<a class="rec-exit-fixed" href="index.html">← Exit Recruiter Mode</a>
 
 <main class="rec-main">
   <div class="wrap">
@@ -295,6 +490,29 @@
 </main>
 
 <script>
+  (function () {
+    // Same nav behavior as index.html: border appears once scrolled, and
+    // --nav-h is measured (not guessed) so .rec-main's clearance padding
+    // always matches the nav's real height at any width.
+    var nav = document.getElementById('siteNav');
+    window.addEventListener('scroll', function () {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    var syncNavHeight = function () {
+      document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+    };
+    syncNavHeight();
+    window.addEventListener('resize', syncNavHeight);
+    if ('ResizeObserver' in window) new ResizeObserver(syncNavHeight).observe(nav);
+
+    // Resume dropdown: blur the link after a click so the menu doesn't
+    // stay stuck open once the mouse leaves.
+    document.querySelectorAll('.nav-dropdown a, .nav-dropdown button').forEach(function (a) {
+      a.addEventListener('click', function () { a.blur(); });
+    });
+  })();
+
   (function () {
     // Same technique as index.html's footer clock (Intl.DateTimeFormat
     // pinned to America/Los_Angeles), just with richer format options to

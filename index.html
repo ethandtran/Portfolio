@@ -297,6 +297,14 @@
     flex-wrap: wrap;
   }
 
+  .hero-photo-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
   .hero-photo {
     width: 150px;
     height: 150px;
@@ -312,6 +320,25 @@
     font-weight: 300;
     overflow: hidden;
     position: relative;
+  }
+
+  .hero-recruiter-btn {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 10px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .hero-recruiter-btn:hover {
+    color: var(--ink);
+    border-color: var(--ink-faint);
   }
 
   .hero-photo img {
@@ -1855,7 +1882,6 @@
     <a href="#work">work</a>
     <a href="#projects">projects</a>
     <a href="#about">about</a>
-    <a href="recruiter.html">recruiter mode</a>
     <span class="nav-combo">
       <span class="nav-dropdown">
         <button type="button" class="nav-dropdown-trigger">resume</button>
@@ -1873,9 +1899,12 @@
 <main id="top">
   <section class="hero">
     <div class="wrap hero-row">
-      <div class="hero-photo">
-        <span>Add your photo</span>
-        <img src="assets/home/photo-of-me.jpg" alt="Ethan Tran" onload="this.previousElementSibling.style.display='none'">
+      <div class="hero-photo-col">
+        <div class="hero-photo">
+          <span>Add your photo</span>
+          <img src="assets/home/photo-of-me.jpg" alt="Ethan Tran" onload="this.previousElementSibling.style.display='none'">
+        </div>
+        <a class="hero-recruiter-btn" href="recruiter.html">Recruiter Mode</a>
       </div>
       <div class="hero-text">
         <h1 class="hero-title serif"><span class="visually-hidden">Hi! I'm Ethan Tran.</span><span class="hero-title-typed" aria-hidden="true"></span></h1>
