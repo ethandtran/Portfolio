@@ -479,15 +479,13 @@
   .rec-skill-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
   }
 
-  .rec-skill-tags .tag {
-    font-size: 0.78rem;
-    padding: 5px 12px;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    color: var(--ink-soft);
+  .rec-skill-tags .skill-item:not(:last-child)::after {
+    content: "\00a0\00b7\00a0";
+    color: var(--ink-faint);
   }
 
   @media (max-width: 620px) {
@@ -542,37 +540,37 @@
       <div class="rec-skill-row">
         <p class="rec-skill-label">Engineering Software</p>
         <div class="rec-skill-tags">
-          <span class="tag">SolidWorks (CSWA Certified)</span>
-          <span class="tag">PTC Creo</span>
-          <span class="tag">ANSYS Mechanical</span>
-          <span class="tag">Python</span>
-          <span class="tag">MATLAB</span>
-          <span class="tag">Arduino</span>
-          <span class="tag">Teamcenter</span>
-          <span class="tag">Jira</span>
+          <span class="skill-item">SolidWorks (CSWA Certified)</span>
+          <span class="skill-item">PTC Creo</span>
+          <span class="skill-item">ANSYS Mechanical</span>
+          <span class="skill-item">Python</span>
+          <span class="skill-item">MATLAB</span>
+          <span class="skill-item">Arduino</span>
+          <span class="skill-item">Teamcenter</span>
+          <span class="skill-item">Jira</span>
         </div>
       </div>
 
       <div class="rec-skill-row">
         <p class="rec-skill-label">Manufacturing</p>
         <div class="rec-skill-tags">
-          <span class="tag">3D Printing</span>
-          <span class="tag">Laser Cutting</span>
-          <span class="tag">Manual Mill</span>
-          <span class="tag">Manual Lathe</span>
-          <span class="tag">GD&amp;T</span>
-          <span class="tag">DFA/DFM</span>
+          <span class="skill-item">3D Printing</span>
+          <span class="skill-item">Laser Cutting</span>
+          <span class="skill-item">Manual Mill</span>
+          <span class="skill-item">Manual Lathe</span>
+          <span class="skill-item">GD&amp;T</span>
+          <span class="skill-item">DFA/DFM</span>
         </div>
       </div>
 
       <div class="rec-skill-row">
         <p class="rec-skill-label">Product &amp; AI</p>
         <div class="rec-skill-tags">
-          <span class="tag">Generative AI (Claude, ChatGPT, Gemini)</span>
-          <span class="tag">Excel</span>
-          <span class="tag">Requirements Definition</span>
-          <span class="tag">Tradeoff Analysis</span>
-          <span class="tag">Root Cause Investigation</span>
+          <span class="skill-item">Generative AI (Claude, ChatGPT, Gemini)</span>
+          <span class="skill-item">Excel</span>
+          <span class="skill-item">Requirements Definition</span>
+          <span class="skill-item">Tradeoff Analysis</span>
+          <span class="skill-item">Root Cause Investigation</span>
         </div>
       </div>
     </section>
