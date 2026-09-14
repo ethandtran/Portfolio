@@ -458,6 +458,38 @@
     white-space: nowrap;
   }
 
+  .rec-skill-row {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rec-skill-row:last-child { border-bottom: none; }
+
+  .rec-skill-label {
+    flex: none;
+    width: 160px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .rec-skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .rec-skill-tags .tag {
+    font-size: 0.78rem;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+  }
+
   @media (max-width: 620px) {
     .site-nav { padding: 20px 24px; }
     .rec-main { padding: calc(var(--nav-h) + 32px) 0 90px; }
@@ -465,6 +497,8 @@
     .rec-proj-row { flex-direction: column; gap: 8px; }
     .rec-exp-dates { order: -1; }
     .rec-exit-fixed { left: 16px; bottom: 16px; font-size: 0.78rem; padding: 7px 14px; }
+    .rec-skill-row { flex-direction: column; gap: 8px; }
+    .rec-skill-label { width: auto; }
   }
 </style>
 </head>
@@ -521,6 +555,48 @@
           <p class="rec-exp-desc">Drove design, testing, failure analysis, and product specifications for vacuums from prototype to launch. Optimized the autoempty system on the <a href="https://www.sharkninja.com/shark-transformer-true-pet-upright-vacuum/LX501UPG1.html" target="_blank" rel="noopener">Shark Transformer</a> and served as engineering lead on the <a href="https://www.costco.com/p/-/shark-navigator-lift-away-upright-vacuum-with-reveal-technology/4201031429" target="_blank" rel="noopener">Shark Navigator</a>.</p>
         </div>
         <p class="rec-exp-dates">Jan – Jun 2026</p>
+      </div>
+    </section>
+
+    <section class="rec-section">
+      <p class="rec-section-label">My Toolkit</p>
+      <div class="rec-divider"></div>
+
+      <div class="rec-skill-row">
+        <p class="rec-skill-label">Engineering Software</p>
+        <div class="rec-skill-tags">
+          <span class="tag">SolidWorks (CSWA Certified)</span>
+          <span class="tag">PTC Creo</span>
+          <span class="tag">ANSYS Mechanical</span>
+          <span class="tag">Python</span>
+          <span class="tag">MATLAB</span>
+          <span class="tag">Arduino</span>
+          <span class="tag">Teamcenter</span>
+          <span class="tag">Jira</span>
+        </div>
+      </div>
+
+      <div class="rec-skill-row">
+        <p class="rec-skill-label">Manufacturing</p>
+        <div class="rec-skill-tags">
+          <span class="tag">3D Printing</span>
+          <span class="tag">Laser Cutting</span>
+          <span class="tag">Manual Mill</span>
+          <span class="tag">Manual Lathe</span>
+          <span class="tag">GD&amp;T</span>
+          <span class="tag">DFA/DFM</span>
+        </div>
+      </div>
+
+      <div class="rec-skill-row">
+        <p class="rec-skill-label">Product &amp; AI</p>
+        <div class="rec-skill-tags">
+          <span class="tag">Generative AI (Claude, ChatGPT, Gemini)</span>
+          <span class="tag">Excel</span>
+          <span class="tag">Requirements Definition</span>
+          <span class="tag">Tradeoff Analysis</span>
+          <span class="tag">Root Cause Investigation</span>
+        </div>
       </div>
     </section>
 
