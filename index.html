@@ -699,11 +699,11 @@
 
   .about-gallery {
     position: relative;
-    width: 480px;
-    height: 480px;
+    width: 400px;
+    height: 450px;
     justify-self: center;
     align-self: center;
-    transform: translate(12px, -26px);
+    transform: translate(52px, -26px);
   }
 
   .gallery-photo {
@@ -737,9 +737,9 @@
     border-radius: 2px;
   }
 
-  .gp-1 { top: 0; left: 0; z-index: 1; transform: rotate(-9deg); }
-  .gp-2 { top: 90px; left: 130px; z-index: 2; transform: rotate(6deg); }
-  .gp-3 { top: 149px; left: 215px; width: 265px; z-index: 3; transform: rotate(-2deg); }
+  .gp-1 { top: 120px; left: 0; z-index: 1; transform: rotate(-9deg); }
+  .gp-2 { top: 11px; left: 137px; z-index: 2; transform: rotate(6deg); }
+  .gp-3 { top: 137px; left: 74px; width: 265px; z-index: 3; transform: rotate(-2deg); }
 
   @media (hover: hover) and (pointer: fine) {
     .about-gallery:hover .gallery-photo { box-shadow: 0 6px 16px rgba(20, 18, 14, 0.1); }
@@ -752,11 +752,11 @@
 
   @media (max-width: 900px) {
     .about-grid { grid-template-columns: 1fr; }
-    .about-gallery { width: 100%; height: 340px; margin: 10px 0 8px; justify-self: stretch; transform: none; }
+    .about-gallery { width: 100%; height: 300px; margin: 10px 0 8px; justify-self: stretch; transform: none; }
     .gallery-photo { width: 168px; }
-    .gp-1 { top: 0; left: calc(50% - 168px); }
-    .gp-2 { top: 60px; left: calc(50% - 77px); }
-    .gp-3 { top: 104px; left: calc(50% - 17px); width: 186px; }
+    .gp-1 { top: 84px; left: calc(50% - 148px); }
+    .gp-2 { top: 8px; left: calc(50% + 4px); }
+    .gp-3 { top: 96px; left: calc(50% - 93px); width: 186px; }
   }
 
   .block-title {
