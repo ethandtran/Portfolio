@@ -8,8 +8,10 @@ A single-page portfolio site for Ethan Tran (UC Irvine, mechanical engineering).
 
 ## Structure
 
-- `index.html` — the entire main site: markup, `<style>`, and `<script>` all inline in one file.
-- `recruiter.html` — a separate, standalone page (added September 2026), not part of the `index.html` single-page app. A condensed view for recruiters: name/tagline, a live Pacific-time clock, an Experience section (Scientific Horizons + SharkNinja), and a Projects section (UCI Solar Car + UCI Keyak Lab; UCI HyperXite is deliberately excluded since it has no real project-overlay content, only a "coming soon" home tile — recheck the codebase before adding it if that changes). Its "See project →" links deep-link to `index.html#project-<name>`, reusing `index.html`'s existing hash-restore overlay-opening logic rather than duplicating project content. Shares `index.html`'s exact design system (same CSS custom properties, fonts, colors) but keeps its own copy of that CSS since there's no shared stylesheet file. Linked from `index.html`'s main nav ("recruiter mode").
+- `index.html` — the main site's markup only. Pulls in `styles.css` and `main.js` (both added September 2026, split out of what used to be one giant inline `<style>`/`<script>` in this file — for browser caching and editability, not for any framework/build reason: there's still no build step, they're just plain `<link>`/`<script src>`).
+- `styles.css` — all of `index.html`'s CSS.
+- `main.js` — all of `index.html`'s JS (project overlays, custom cursor, hash routing, scroll reveals, etc.), loaded at the end of `<body>` so it runs after the DOM it queries exists.
+- `recruiter.html` — a separate, standalone page (added September 2026), not part of the `index.html` single-page app. A condensed view for recruiters: name/tagline, a live Pacific-time clock, a Toolkit section (skills pulled from the engineering/product resumes), an Experience section (Scientific Horizons + SharkNinja), and a Projects section (UCI Solar Car + UCI Keyak Lab; UCI HyperXite is deliberately excluded since it has no real project-overlay content, only a "coming soon" home tile — recheck the codebase before adding it if that changes). Its "See project →" links deep-link to `index.html#project-<name>`, reusing `index.html`'s existing hash-restore overlay-opening logic rather than duplicating project content. Shares `index.html`'s exact design system (same CSS custom properties, fonts, colors) but keeps its own inline copy of that CSS/JS rather than sharing `styles.css`/`main.js` — it's a much smaller page and doesn't need the same split.
 - `assets/<project>/` — photos and videos, one folder per project: `home/`, `solar-car/`, `sharkninja/`, `keyak-lab/`, `autonomous-rover/`, `rc-drone/`, `rc-rover/`, `cad-projects/`.
 - `README.md` — local preview and deployment instructions (Live Server, GitHub Pages, Netlify, Vercel).
 
@@ -34,7 +36,7 @@ None currently open.
 
 ## Workflow
 
-Edit `index.html` and/or add or replace files under `assets/<project>/`, then:
+Edit `index.html` (markup), `styles.css`, and/or `main.js` (recruiter.html keeps its markup/CSS/JS inline, as one file), and/or add or replace files under `assets/<project>/`, then:
 
 ```
 git add -A
